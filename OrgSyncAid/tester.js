@@ -5,15 +5,23 @@
 - z-index on mousover images increased to 1 to bring forward and transform: translate to relocate on page
 1.1.0 Bug Fixes/Functionality:
 - only matches *://orgsync.com/*
-- Notes section and checklist in local storage for each unique page
+- Notes section in local storage for each unique page
 1.1.0 Bug Fixes:
 - filter out unwanted elements from main page
 1.1.1
 - tooltip popups to replace all confirm messages
 	(ie. Open All URLs button, save button)
+1.1.2
+- Checklist saved in local storage 
+
+
+//BUGPOT
+//BUGPOT15428: If the number of items in the checklist changes, this will mess up formatting. Location: reviewCriteria.js
+
+
 */
 
-/*log responses to the console
+/*DEBUG: log responses to the console
 var aryResponses = [];
 for(var i = 0; i < $('div.response').children('p').length; i++ ){
     aryResponses[i] = $('div.response').children('p').not('a')[i].innerHTML;
@@ -28,11 +36,6 @@ for(var i = 0; i < $('div.response').children('p').length; i++ ){
 }
 //console.log(aryResponses);
 */
-
-
-//jQuery
-//$('[myc="blue"][myid="1"][myid="3"]'); AND EXAMPLE
-//$('[myc="blue"],[myid="1"],[myid="3"]'); OR EXAMPLE
 
 //innocent until proven guilty
 $('div.response').addClass('good');
@@ -166,15 +169,6 @@ $('#togButton').on({
      $(this).tooltip("disable");   
   }
 });
-
-
-
-
-
-
-
-
-
 
 
 
@@ -513,8 +507,10 @@ function Conference(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Conference Fees are capped at $50 per quantity of anticipated attendance (DG: 3311-10201401). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt);
 	reqAmt = (reqAmt.replace('$',''));
-	appender(msg, l);
-	capCheck(cap, reqAmt,l);
+	if (cap !== 0){
+		appender(msg, l);
+		capCheck(cap, reqAmt,l);	
+	}
 }
 
 //3724 Advertising
@@ -523,8 +519,10 @@ function Advertising(LI, reqAmt, l){
 	var capAmt =  toCurrency(ant);
 	var msg = ('Advertising is capped at $1 per quantity of anticipated attendance (DG: 3724-00201322). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
-	appender(msg, l);
-	capCheck(cap, reqAmt,l);
+	if (cap !== 0){
+		appender(msg, l);
+		capCheck(cap, reqAmt,l);	
+	}
 }
 
 
@@ -541,8 +539,10 @@ function Bus(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('All forms of transportation are capped at $57.64 per quantity of anticipated attendance (DG: 0001-11201403). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
-	appender(msg, l);
-	capCheck(cap, reqAmt,l);
+	if (cap !== 0){
+		appender(msg, l);
+		capCheck(cap, reqAmt,l);	
+	}
 	
 }
 
@@ -553,8 +553,10 @@ function Contractual(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Contractual services are capped at $10 per quantity of anticipated attendance per day of the program (DG: 3752-00201328). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
-	appender(msg, l);
-	capCheck(cap, reqAmt,l);
+	if (cap !== 0){
+		appender(msg, l);
+		capCheck(cap, reqAmt,l);	
+	}
 	
 }
 
@@ -565,8 +567,10 @@ function Dues(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Non-conference, event-based fees are capped at $10 per quantity of anticipated attendance (DG: 0002-00201316). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
-	appender(msg, l);
-	capCheck(cap, reqAmt,l);
+	if (cap !== 0){
+		appender(msg, l);
+		capCheck(cap, reqAmt,l);	
+	}
 	
 }
 
@@ -715,7 +719,7 @@ $(".item-info-group").append('<h3 class="checkHead">Checklist:</h3>');
 
 var checklist  = document.createElement ("div");
 checklist.id = "review"
-$(".item-info-group").append(checklist);
+$(".item-info-group").filter(":visible").append(checklist); //bug15426 problem area
 $('#review').load(chrome.extension.getURL("reviewCriteria.html"));
 checklist.width = "100%";
 checklist.height = "350px";
@@ -737,7 +741,7 @@ $('#save').text("Save Notes")
 
 $('#save').on({
   "click": function() {
-    $(this).tooltip({ items: "#save", content: "This does not save your checklist!"});
+    $(this).tooltip({ items: "#save", content: "Notes and checklist have been saved."});
     $(this).tooltip("open");
   },
   "mouseout": function() {      
@@ -789,164 +793,81 @@ function toCurrency(value){
 
 //Save notes and checklist in chrome.storage
 
-
-	//Get the notes
+$( document ).ready(function(){
+	//bug 15426: checkboxes were inserted twice 
 	
-	//Save it using the chrome extension storage API
-
-	
-
-
-/*
-saveButton.addEventListener('click',function(){
-
-var save = {};
-var noteValue = $('#sideNote').val();
-save["Notes"] = noteValue;
-
-chrome.storage.sync.set($('#sideNote').val(), function() {
-    console.log($('#sideNote').val());
-});
-
-});
-
-
-window.onLoad(
-	chrome.storage.sync.get($('#sideNote').val(), function() {
-    	console.log($('#sideNote').val());
-	})
-
-)
-*/
-
-//currently cannot figure ou thow to save and retrieve values
-/*
-saveButton.addEventListener('click',function(){
-	localStorage.notes = $('#sideNote').val();
-    var notes = $('#sideNote').val();
-                             //key    value   callback
-    chrome.storage.sync.set({"userNotes": notes}, function() {
-        console.log("The value stored was: " + notes);
-    });
-});
-
-
-chrome.storage.sync.get(userNotes, function() {
-        console.log("The value stored was: " + notes);
-    });
-
-
-
-
-
-window.onload($('#sideNote').val(localStorage.notes))
-*/
-//This stores one value across all pages for Notes
-//I want to store a unique value for each page
-
-
-
-
-
-/*
-(function(){
-
-var value = $('#sideNote')
-var nSub = (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1)
-
-function valueChanged(newValue) {
-	value.val(newValue)
-}
-
-saveButton.addEventListener('click',function(){
-	var value = "Submission Notes for " + nSub + ": " + $('#sideNote').val()
-	chrome.storage.sync.set({
-		nSub: value,
-		timestamp: Date.now()
-	}, function() {
-		console.log("Value set: " + value);
-	});
-});
-
-	chrome.storage.onChanged.addListener(function(changes, namespace){
-		if(changes.nSub){
-			valueChanged(changes.nSub.newValue)
-		}
-	});
-
-	chrome.storage.sync.get("myValue", function(result){
-		valueChanged(result.myValue);
-	})
-
-})();
-
-
-
-//This also saves 1 value on all pages. And I like the idea of chrome.storage better
-(function(){
+	//initialize value for notes
 	var value = $('#sideNote')
+	var nSub = (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1)
 	
-	function valueChanged(newValue) {
-		value.val(newValue)
-	}
-
-	saveButton.addEventListener('click',function(){
-		var value = $('#sideNote').val()
-		window.localStorage.notes = value
-		console.log("Notes: " + window.localStorage.notes + " has been saved.")
-	});
-
-	valueChanged(window.localStorage.notes);
-
-})();
-
-*/
-//This works
-(function(){
-	/* this works when run independently, but not here
-		aryChecks = [];
-	
+	//initialize values for checklist
+	var aryChecks = [];
     	for(var i = 0; i < $('.checkbox').length; i++){
         	if ($('.checkbox')[i].checked === true){
-            	aryChecks[i] = 1;
+            	aryChecks[i] = "1";
         	}else{
-            	aryChecks[i] = 0;
+            	aryChecks[i] = "0";
         	}
     	
 		};
 
-	console.log(aryChecks)
-
-	*/
-	var value = $('#sideNote')
-	var nSub = (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1)
 	var cSub = nSub + "a" //arbitrary letter
-	console.log(cSub)
+	
+	
+	//for entering notes once they have been retrieved
 	function valueChanged(newValue) {
 		value.val(newValue)
 	}
 
 	saveButton.addEventListener('click',function(){
+		//save the notes
 		var value = $('#sideNote').val()
 		localStorage.setItem(nSub,value)
 		console.log("Notes for " + nSub + " have been saved.")
 
-		//localStorage.setItem(cSub, JSON.stringify(aryChecks))
-
+		//flash green to indicate to the user that the save was completed
 		$('#sideNote').toggle("highlight", {color: '#CEFFCF'}, 10 );
 		$('#sideNote').toggle("highlight", {color: '#CEFFCF'}, 100 );
 
+		//record the checklist in an array to save in localStorage
+		var aryChecks = [];
+    	for(var i = 0; i < $('.checkbox').length; i++){
+        	if ($('.checkbox')[i].checked === true){
+            	aryChecks[i] = "1";
+        	}else{
+            	aryChecks[i] = "0";
+        	}
+    	
+		};
+		console.log(aryChecks);
+		localStorage.setItem(cSub, JSON.stringify(aryChecks))
 
 		//these two won't work
 		//$('#review').toggle("highlight", {color: '#CEFFCF'}, 10 );
 		//$('#review').toggle("highlight", {color: '#CEFFCF'}, 100 );
 	});
 
+	//send the retrieved notes to be added into the notes section
 	valueChanged(localStorage.getItem(nSub,value));
-	//var retrievedObject = localStorage.getItem(cSub, aryChecks);
-	//aryChecks = JSON.parse(retrievedObject);
-	//console.log(aryChecks);
-})();
+	
+	//retrieve checkbox array
+	var aryChecks = JSON.parse(localStorage.getItem(cSub,aryChecks))
+
+	
+	//correctly retrieving. now they checklist needs to be checked
+	//with the corresponding array values
+
+	//load saved checklist
+	for(var i = 0; i < $('.checkbox').length; i++){
+        	if (aryChecks[i] === "1"){
+            	$('.checkbox')[i].checked = true;
+        	}else{
+            	$('.checkbox')[i].checked = false;
+        	}
+    	
+		};
+
+});
 
 
 
