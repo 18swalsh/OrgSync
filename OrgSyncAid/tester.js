@@ -1,10 +1,13 @@
+
 //tester.js
 /*
 1.0.1 Bug Fixes:
 - z-index on mousover images increased to 1 to bring forward and transform: translate to relocate on page
 1.1.0 Bug Fixes/Functionality:
 - only matches *://orgsync.com/*
-- Notes section and checklist 
+- Notes section and checklist in local storage for each unique page
+1.1.0 Bug Fixes:
+- filter out unwanted elements from main page
 */
 
 /*log responses to the console
@@ -27,7 +30,6 @@ for(var i = 0; i < $('div.response').children('p').length; i++ ){
 //jQuery
 //$('[myc="blue"][myid="1"][myid="3"]'); AND EXAMPLE
 //$('[myc="blue"],[myid="1"],[myid="3"]'); OR EXAMPLE
-
 
 //innocent until proven guilty
 $('div.response').addClass('good');
@@ -163,6 +165,7 @@ $('.content-pane a:contains("www.")').each(function(){
 		&& $(this).text().search('mouser') === -1
 		&& $(this).text().search('uscomposites') === -1
 		&& $(this).text().search('harborfreight') === -1
+		&& $(this).text().search('peapod') === -1
   		&& $(this).text().search('dbs.umd.edu') === -1){
 			
 			if ($(this).attr('toggled') === "false"){	
@@ -667,7 +670,7 @@ later point.
 
 storage.sync must be used for Chrome sync
 */
-
+/*
 var iframe3  = document.createElement ("iframe");
 iframe3.id = "review"
 iframe3.src  = chrome.extension.getURL("reviewCriteria.html");
@@ -677,6 +680,19 @@ iframe3.height = "350px";
 //default class is 'bad'
 //when all checkboxes are checked, this should be replaced with 'good'
 //this will be done in reveiewCriteria.html itself
+^^cannot get this to work a an iFrame. Converting to div^^
+*/
+
+$(".item-info-group").append('<h3 class="checkHead">Checklist:</h3>');
+
+var checklist  = document.createElement ("div");
+checklist.id = "review"
+$(".item-info-group").append(checklist);
+$('#review').load(chrome.extension.getURL("reviewCriteria.html"));
+checklist.width = "100%";
+checklist.height = "350px";
+
+$(".item-info-group").append('<h3 class="noteHead">Notes:</h3>');
 
 
 var Notes = document.createElement ("textArea");
@@ -686,8 +702,39 @@ $(".item-info-group").append(Notes);
 
 
 
+var saveButton = document.createElement ("button");
+saveButton.id = 'save'
+$(".item-info-group").append(saveButton);
+$('#save').text("Save Notes")
+
+$('#save').on({
+  "click": function() {
+    $(this).tooltip({ items: "#save", content: "This does not save your checklist!"});
+    $(this).tooltip("open");
+  },
+  "mouseout": function() {      
+     $(this).tooltip("disable");   
+  }
+});
 
 
+
+
+
+
+//hide unwanted elements on the main screen
+if( $('.page-title').text() === "SGA Funding Application - April 2016" ){
+	//$('#save').hide();
+	//$('#review').hide();
+	$('#togButton').hide();
+	$('#review').hide();
+	$('.review').hide();
+	$('.checkHead').hide();
+	$('.noteHead').hide()
+	$('#sideNote').hide();
+	$('#save').hide();
+	$('#pjax-container > div.layout.with-sidebar > div.sidebar > ul:nth-child(6)').hide();
+}
 
 
 //idea: allow user to change div color on click
@@ -708,3 +755,194 @@ function toCurrency(value){
 	var num = '$' + value.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	return num;
 }
+
+
+
+
+//Save notes and checklist in chrome.storage
+
+
+	//Get the notes
+	
+	//Save it using the chrome extension storage API
+
+	
+
+
+/*
+saveButton.addEventListener('click',function(){
+
+var save = {};
+var noteValue = $('#sideNote').val();
+save["Notes"] = noteValue;
+
+chrome.storage.sync.set($('#sideNote').val(), function() {
+    console.log($('#sideNote').val());
+});
+
+});
+
+
+window.onLoad(
+	chrome.storage.sync.get($('#sideNote').val(), function() {
+    	console.log($('#sideNote').val());
+	})
+
+)
+*/
+
+//currently cannot figure ou thow to save and retrieve values
+/*
+saveButton.addEventListener('click',function(){
+	localStorage.notes = $('#sideNote').val();
+    var notes = $('#sideNote').val();
+                             //key    value   callback
+    chrome.storage.sync.set({"userNotes": notes}, function() {
+        console.log("The value stored was: " + notes);
+    });
+});
+
+
+chrome.storage.sync.get(userNotes, function() {
+        console.log("The value stored was: " + notes);
+    });
+
+
+
+
+
+window.onload($('#sideNote').val(localStorage.notes))
+*/
+//This stores one value across all pages for Notes
+//I want to store a unique value for each page
+
+
+
+
+
+/*
+(function(){
+
+var value = $('#sideNote')
+var nSub = (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1)
+
+function valueChanged(newValue) {
+	value.val(newValue)
+}
+
+saveButton.addEventListener('click',function(){
+	var value = "Submission Notes for " + nSub + ": " + $('#sideNote').val()
+	chrome.storage.sync.set({
+		nSub: value,
+		timestamp: Date.now()
+	}, function() {
+		console.log("Value set: " + value);
+	});
+});
+
+	chrome.storage.onChanged.addListener(function(changes, namespace){
+		if(changes.nSub){
+			valueChanged(changes.nSub.newValue)
+		}
+	});
+
+	chrome.storage.sync.get("myValue", function(result){
+		valueChanged(result.myValue);
+	})
+
+})();
+
+
+
+//This also saves 1 value on all pages. And I like the idea of chrome.storage better
+(function(){
+	var value = $('#sideNote')
+	
+	function valueChanged(newValue) {
+		value.val(newValue)
+	}
+
+	saveButton.addEventListener('click',function(){
+		var value = $('#sideNote').val()
+		window.localStorage.notes = value
+		console.log("Notes: " + window.localStorage.notes + " has been saved.")
+	});
+
+	valueChanged(window.localStorage.notes);
+
+})();
+
+*/
+//This works
+(function(){
+	/* this works when run independently, but not here
+		aryChecks = [];
+	
+    	for(var i = 0; i < $('.checkbox').length; i++){
+        	if ($('.checkbox')[i].checked === true){
+            	aryChecks[i] = 1;
+        	}else{
+            	aryChecks[i] = 0;
+        	}
+    	
+		};
+
+	console.log(aryChecks)
+
+	*/
+	var value = $('#sideNote')
+	var nSub = (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1)
+	var cSub = nSub + "a" //arbitrary letter
+	console.log(cSub)
+	function valueChanged(newValue) {
+		value.val(newValue)
+	}
+
+	saveButton.addEventListener('click',function(){
+		var value = $('#sideNote').val()
+		localStorage.setItem(nSub,value)
+		console.log("Notes for " + nSub + " have been saved.")
+
+		//localStorage.setItem(cSub, JSON.stringify(aryChecks))
+
+		$('#sideNote').toggle("highlight", {color: '#CEFFCF'}, 10 );
+		$('#sideNote').toggle("highlight", {color: '#CEFFCF'}, 100 );
+
+
+		//these two won't work
+		//$('#review').toggle("highlight", {color: '#CEFFCF'}, 10 );
+		//$('#review').toggle("highlight", {color: '#CEFFCF'}, 100 );
+	});
+
+	valueChanged(localStorage.getItem(nSub,value));
+	//var retrievedObject = localStorage.getItem(cSub, aryChecks);
+	//aryChecks = JSON.parse(retrievedObject);
+	//console.log(aryChecks);
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
