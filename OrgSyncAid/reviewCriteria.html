@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="reviewCriteria.css">
+	<link rel="stylesheet" type="text/css" href="tester.css">
+	<script src="jquery-3.0.0.min.js"></script>
+</head>
+<body class="good">  <!--supposed to be set to bad initially and then changed based on the user checking the boxes. I can't get this to work though
+<script>
+
+$(document).ready(function () {
+    var ckbox = $('.checkbox');
+
+    $('input').on('click',function () {
+        if (ckbox.is(':checked')) {
+            	$('body').removeClass('bad')
+				$('body').addClass('good')
+        } else {
+           		$('body').removeClass('good')
+				$('body').addClass('bad')
+        }
+    });
+});
+
+</script-->
+
+<form action="" class="review" id="checkArray">
+<div>
+    <input type="checkbox" class="checkbox"/>
+    banana <br>
+    <input type="checkbox" class="checkbox" />
+    banana
+</div>
+</form>
+</body>
+</html>

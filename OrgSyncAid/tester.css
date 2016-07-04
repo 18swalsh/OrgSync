@@ -1,0 +1,159 @@
+.good {
+	background-color: #CEFFCF; /*green*/
+	color: #008000;
+}
+
+.bad {
+	background-color: #FFCECF; /*red*/
+	color: #9C0000;
+}
+
+.neutral {
+	background-color: #FFEB9C; 
+	color: #D79100;
+}
+.NaQ { /*not a question */
+	background-color: #F2F3F6; /*same as the adjacent question box */
+
+}
+.strike { 
+	text-decoration: line-through;
+	text-decoration-color: #E57D02;
+}
+.admin { 
+	border-color: #E57D02;
+	border-width: 4px;
+	border-style: solid;
+	border-radius: 3%;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.bumpDown { 
+	margin-top: 10px;
+}
+
+.chargeAdmission {
+	background-color: #BFEFFF; /*blue*/
+	color: #00688B;
+}
+
+.qTitle {
+	color: #333; /*black*/
+}
+
+.box {
+	background: white;
+	border-color: #C1C1C1; /*grey*/
+}
+
+.checker {
+	border-color: #FFFFFF; /*none/white*/
+}
+
+.depth {
+    position: relative;
+    z-index: 0;
+}
+.depth:hover,
+.depth:active {
+    outline: 0;
+}
+
+/* 3D Button */
+
+.depth {
+    background: #444;
+    border: none;
+    border-radius: 40px;
+    box-shadow: inset 0 0 2px 2px hsla(0,0%,0%,.2),
+                inset 0 0 2px 4px hsla(0,0%,0%,.2),
+                inset 0 0 2px 6px hsla(0,0%,0%,.2),
+                inset 0 0 1px 8px hsla(0,0%,0%,.5),
+                inset 0 -4px 2px 4px hsla(0,0%,0%,.5),
+                inset 0 1px 1px 8px hsla(0,0%,100%,.25),
+                inset 0 -30px 30px hsla(0,0%,0%,.2),
+                0 -4px 8px 4px hsla(0,0%,0%,.5),
+                0 10px 10px hsla(0,0%,0%,.25),
+                0 0 2px 2px hsla(0,0%,0%,.2),
+                0 0 2px 4px hsla(0,0%,0%,.2),
+                0 0 2px 6px hsla(0,0%,0%,.2),
+                0 0 2px 8px hsla(0,0%,0%,.5),
+                0 1px 2px 8px hsla(0,0%,100%,.25),
+                0 -1px 2px 8px hsla(0,0%,0%,.5);
+    color: #303030;
+    cursor: pointer;
+    font: bold 20px/42px sans-serif;
+    height: 40px;
+    padding: 0;
+    text-shadow: 0 1px 1px hsla(0,0%,100%,.25),
+                 0 -1px 1px hsla(0,0%,0%,.75);
+    width: 40px;
+}
+
+.depth:hover {
+    color: #BA0000;
+    text-shadow: 0 0 20px hsla(240,75%,75%,.25),
+                 0 1px 1px hsla(0,0%,100%,.25),
+                 0 -1px 1px hsla(0,0%,0%,.75);
+}
+
+
+.depth:active {
+    box-shadow: inset 0 0 2px 2px hsla(0,0%,0%,.2),
+                inset 0 0 2px 4px hsla(0,0%,0%,.2),
+                inset 0 0 2px 6px hsla(0,0%,0%,.2),
+                inset 0 0 1px 7px hsla(0,0%,0%,.5),
+                inset 0 5px 15px 7px hsla(0,0%,0%,.15),
+                inset 0 -4px 2px 3px hsla(0,0%,0%,.5),
+                inset 0 1px 1px 7px hsla(0,0%,100%,.25),
+                inset 0 -30px 30px hsla(0,0%,0%,.1),
+                inset 0 30px 30px hsla(0,0%,0%,.2),
+                0 -4px 8px 4px hsla(0,0%,0%,.5),
+                0 5px 10px hsla(0,0%,0%,.25),
+                0 0 2px 2px hsla(0,0%,0%,.2),
+                0 0 2px 4px hsla(0,0%,0%,.2),
+                0 0 2px 6px hsla(0,0%,0%,.2),
+                0 0 2px 8px hsla(0,0%,0%,.5),
+                0 1px 2px 8px hsla(0,0%,100%,.25),
+                0 -1px 2px 8px hsla(0,0%,0%,.5);
+    line-height: 86px;
+}
+
+.opened {
+	color: #BA0000;
+    text-shadow: 0 0 20px hsla(240,75%,75%,.5),
+                 0 1px 1px hsla(0,0%,100%,.25),
+                 0 -1px 1px hsla(0,0%,0%,.75);
+}
+
+.closed {
+	color: #303030;
+    text-shadow: 0 1px 1px hsla(0,0%,100%,.25),
+                 0 -1px 1px hsla(0,0%,0%,.75);
+}
+
+#sideNote{
+    width: 100%;
+    height: 350px;
+    font-size: 16px;
+    color: #E57D02; /*Admin color*/
+    font-family: Helvetica;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid #DDDDDD;
+    padding-left: .66667rem;
+    padding-right: .66667rem;
+}
+
+#sideNote:focus {
+  box-shadow: 0 0 5px rgb(186, 0, 0);
+  padding: 3px 0px 3px 3px;
+  margin: 25px 1px 3px 0px;
+}
+
+
