@@ -150,6 +150,7 @@
     padding-right: .66667rem;
 }
 
+/*02035*/
 #sideNote:focus {
   box-shadow: 0 0 5px rgb(186, 0, 0);
   padding: 3px 0px 3px 3px;
