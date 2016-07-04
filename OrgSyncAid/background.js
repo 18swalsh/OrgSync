@@ -5,6 +5,7 @@ chrome.browserAction.onClicked.addListener(function(activeTab){
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
 		var activeTab = tabs[0];
 		chrome.tabs.sendMessage(activeTab.id, {"message": "clicked_browser_action"});
+		chrome.tabs.create({ url: "https://orgsync.com/59742/forms/192672/submissions" })
 	});
 });
 

@@ -187,6 +187,8 @@ $('.content-pane a:contains("www.")').each(function(){
 		&& $(this).text().search('uscomposites') === -1
 		&& $(this).text().search('harborfreight') === -1
 		&& $(this).text().search('peapod') === -1
+		&& $(this).text().search('pre-engineering') === -1
+		&& $(this).text().search('rei.com') === -1
   		&& $(this).text().search('dbs.umd.edu') === -1){
 			
 			if ($(this).attr('toggled') === "false"){	
@@ -737,7 +739,7 @@ $(".item-info-group").append(Notes);
 var saveButton = document.createElement ("button");
 saveButton.id = 'save'
 $(".item-info-group").append(saveButton);
-$('#save').text("Save Notes")
+$('#save').text("Save All")
 
 $('#save').on({
   "click": function() {
@@ -842,9 +844,11 @@ $( document ).ready(function(){
 		console.log(aryChecks);
 		localStorage.setItem(cSub, JSON.stringify(aryChecks))
 
-		//these two won't work
-		//$('#review').toggle("highlight", {color: '#CEFFCF'}, 10 );
-		//$('#review').toggle("highlight", {color: '#CEFFCF'}, 100 );
+		//flash green
+		$('#review').toggle("highlight", {color: '#CEFFCF'}, 10 );
+		$('#review').toggle("highlight", {color: '#CEFFCF'}, 400 );
+		$('#rev').toggle("highlight", {color: '#CEFFCF'}, 10 );
+		$('#rev').toggle("highlight", {color: '#CEFFCF'}, 400 );
 	});
 
 	//send the retrieved notes to be added into the notes section
