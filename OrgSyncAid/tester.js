@@ -8,6 +8,9 @@
 - Notes section and checklist in local storage for each unique page
 1.1.0 Bug Fixes:
 - filter out unwanted elements from main page
+1.1.1
+- tooltip popups to replace all confirm messages
+	(ie. Open All URLs button, save button)
 */
 
 /*log responses to the console
@@ -152,6 +155,30 @@ $('#togButton').addClass('depth')
 
 $('.content-pane a:contains("www.")').attr("toggled", "false");
 button.innerHTML = 'Open All URLs'
+
+
+$('#togButton').on({
+  "click": function() {
+    $(this).tooltip({ items: "#togButton", content: "Some of the links have unsecure addresses and cannot be opened."});
+    $(this).tooltip("open");
+  },
+  "mouseout": function() {      
+     $(this).tooltip("disable");   
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 button.addEventListener('click',function(){
 
 var errSent = false;
@@ -184,9 +211,10 @@ $('.content-pane a:contains("www.")').each(function(){
 				$('#togButton').addClass('closed')
 			}
 	
-	}else if (errSent === false){
-		confirm("Some of the links have unsecure addresses and cannot be opened.");
-		errSent = true;
+	}else if (errSent === false){ //which it will be always since I commented these out
+		//confirm("Some of the links have unsecure addresses and cannot be opened.");
+		//errSent = true;
+
 	}
 });
 });
