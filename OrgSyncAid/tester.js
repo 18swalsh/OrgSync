@@ -1,3 +1,5 @@
+
+
 //02035
 //tester.js
 /*
@@ -304,7 +306,7 @@ There are 17 line item types with specific DGs and 41 general/non-specific DGs
 31. On-campus Storage Documentation
 33. Name of Program
 35. Program Objective / Purchase Description
-37. jation of Program
+37. ation of Program
 39. Explain why program is Off-campus
 41. Space Rental Justification
 43. Space Rental Documentation
@@ -493,16 +495,47 @@ for (var j = 0; j < aryResponses.length; j++){
 	//
 	}else if(aryResponses[j] === ""){
 		console.log('next') //placeholder
-	
-	//Anticipated Attendance
 	}
+
+	if (j === aryResponses.length-1){
+		addRequests(0,1)
+	}
+
+
 
 	//highlight all of the errors
 	$('.error').siblings().addClass('bad')
+};
 
-
+//Check Dates
+function checkDate(reqCheck){ BUG7516
+	var progDate = $('.response:contains("If funds are needed for certain transactions BEFORE the date of program") .response p').text().trim();
+	var deadline = "Apr 4, 2016"
+	var days = dateDifference(deadline,progDate);
+	appenderNotice("The date of program is " + days + " days after the sumbission deadline of " + deadline,45);
+	if (reqCheck > 0){
+		//if (reqCheck > 1500 && days < 60){
+			appenderError("This works",45 )
+		//}
+	}
 
 };
+
+
+//Add up all requested amounts BUG7516
+
+function addRequests(reqAmt,finish){	
+var totalRequest = 0; //is this resetting every time?
+	if (isNaN(reqAmt)===false && reqAmt > 0){
+		totalRequest += parseFloat(reqAmt);
+		confirm(totalRequest)
+	}
+
+		if (finish === 1){
+			//confirm(totalRequest)
+			checkDate(totalRequest);
+		}
+}
 
 
 
@@ -514,6 +547,7 @@ function Conference(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Conference Fees are capped at $50 per quantity of anticipated attendance (DG: 3311-10201401). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt);
 	reqAmt = (reqAmt.replace('$',''));
+	addRequests(reqAmt,0);
 	if (cap !== 0){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
@@ -526,6 +560,7 @@ function Advertising(LI, reqAmt, l){
 	var capAmt =  toCurrency(ant);
 	var msg = ('Advertising is capped at $1 per quantity of anticipated attendance (DG: 3724-00201322). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
+	addRequests(reqAmt,0);
 	if (cap !== 0){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
@@ -535,7 +570,7 @@ function Advertising(LI, reqAmt, l){
 
 //3950 	AV Equipment (Audio-Visual) 
 function AV(LI, reqAmt, l){
-
+	addRequests(reqAmt,0);
 	
 }
 
@@ -546,6 +581,7 @@ function Bus(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('All forms of transportation are capped at $57.64 per quantity of anticipated attendance (DG: 0001-11201403). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
+	addRequests(reqAmt,0);
 	if (cap !== 0){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
@@ -560,6 +596,7 @@ function Contractual(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Contractual services are capped at $10 per quantity of anticipated attendance per day of the program (DG: 3752-00201328). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
+	addRequests(reqAmt,0);
 	if (cap !== 0){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
@@ -574,6 +611,7 @@ function Dues(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Non-conference, event-based fees are capped at $10 per quantity of anticipated attendance (DG: 0002-00201316). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
+	addRequests(reqAmt,0);
 	if (cap !== 0){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
@@ -586,20 +624,20 @@ function Dues(LI, reqAmt, l){
 function eRental(LI, reqAmt, l){
 	var msg = 'Ensure that the group has secure, on-campus storage (DG: 0002-10201502) or a "reasonable expectation of care during the rental period" (DG: 3717-00201330).'
 	appender(msg,l)
-	
+	addRequests(reqAmt,0);
 }
 
 
 //3716 Equipment Repair
 function eRepair(LI, reqAmt, l){
-
+	addRequests(reqAmt,0);
 	
 }
 
 
 //3746 Food
 function Food(LI, reqAmt, l){
-
+	addRequests(reqAmt,0);
 	
 }
 
@@ -610,6 +648,7 @@ function Misc(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Funding for decorations is capped at $1 per quantity of anticipated attendance (DG: 3952-00201332). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ' if the group is seeking funding for decorations')
 	reqAmt = (reqAmt.replace('$',''));
+	addRequests(reqAmt,0);
 	if (cap !== 0){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
@@ -620,35 +659,35 @@ function Misc(LI, reqAmt, l){
 
 //3916 Office Supplies
 function oSupplies(LI, reqAmt, l){
-
+	addRequests(reqAmt,0);
 	
 }
 
 
 //3210 Postage
 function Postage(LI, reqAmt, l){
-
+	addRequests(reqAmt,0);
 	
 }
 
 
 //3718 Printing and Copying
 function Printing(LI, reqAmt, l){
-
+	addRequests(reqAmt,0);
 	
 }
 
 
 //4970 Space Rental
 function Space(LI, reqAmt, l){
-
+	addRequests(reqAmt,0);
 	
 }
 
 
 //3220 Telephone
 function Telephone(LI, reqAmt, l){
-
+	addRequests(reqAmt,0);
 	
 }
 
@@ -657,6 +696,7 @@ function Telephone(LI, reqAmt, l){
 function Wearing(LI, reqAmt, l){
 	var msg = 'Ensure that the group has secure, on-campus storage (DG: 0002-10201502) and that the items will be passed on to future members of the group (DG: 3925-00201344)."'
 	appender(msg,l)
+	addRequests(reqAmt,0);
 }
 
 
@@ -664,12 +704,20 @@ function Wearing(LI, reqAmt, l){
 function oEquipment(LI, reqAmt, l){
 	var msg = 'Ensure that the group has secure, on-campus storage (DG: 0002-10201502).'
 	appender(msg,l)
-	
+	addRequests(reqAmt,0);
 }
 
-
+//appender appends warnings by default
 function appender(str, loc){
 	$('<div class="alert-box warning">' + str + '</div>').insertAfter($('div.response')[loc]);
+}
+
+function appenderNotice(str, loc){
+	$('<div class="alert-box notice">' + str + '</div>').insertAfter($('div.response')[loc]);
+}
+
+function appenderError(str, loc){
+	$('<div class="alert-box error">' + str + '</div>').insertAfter($('div.response')[loc]);
 }
 
 function capCheck(cap, reqAmt, loc){
@@ -681,6 +729,10 @@ function capCheck(cap, reqAmt, loc){
 		$('<div class="alert-box error">'+ alert +'</div>').insertAfter($('div.response')[loc]);
 	}
 }
+
+
+
+
 
 //2000 Security / Salaries -----------?
 //Airfare-----------------------------?
@@ -795,7 +847,9 @@ function toCurrency(value){
 	return num;
 }
 
-
+function dateDifference(date1, date2){
+	return ( new Date(date2).getTime() - new Date(date1).getTime() ) / 86400000;
+};
 
 
 //Save notes and checklist in chrome.storage
@@ -917,6 +971,7 @@ $( document ).ready(function(){
 	})
 	
 });
+
 
 
 
