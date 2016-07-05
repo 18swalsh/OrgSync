@@ -17,7 +17,7 @@ Note: The iFrames rarely play nice.
 
 •	All images have a mouseover attribute that shows the image centered and resized in the window
 
-•	The Checklist and Notes boxes are saved in localStorage, and are unique to each page. The Submission ID is used as the key for the Notes, and the Submission Key + "a" is used for the Checklist array.
+•	The Checklist and Notes boxes are saved in chrome.storage.sync, and are unique to each page. "key" + Submission ID is used as the key for the Notes, and "key" + Submission ID + "a" is used for the Checklist array. 
 
 Note: Don't forget to press the "Save All" button!	
 
