@@ -13,6 +13,9 @@
 	(ie. Open All URLs button, save button)
 1.1.2
 - Checklist saved in local storage 
+1.1.3
+-Make notes box smaller to reveal save button without having to zoom out (must be at 75% zoom)
+-Chnge browser_action tooltip from "Test" to "Cofa yourself"
 
 
 //BUGPOT
@@ -724,7 +727,7 @@ checklist.id = "review"
 $(".item-info-group").filter(":visible").append(checklist); //bug15426 problem area
 $('#review').load(chrome.extension.getURL("reviewCriteria.html"));
 checklist.width = "100%";
-checklist.height = "350px";
+checklist.height = "300px";
 
 $(".item-info-group").append('<h3 class="noteHead">Notes:</h3>');
 

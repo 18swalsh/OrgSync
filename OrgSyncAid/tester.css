@@ -135,7 +135,7 @@
 
 #sideNote{
     width: 100%;
-    height: 350px;
+    height: 200px;
     font-size: 16px;
     color: #E57D02; /*Admin color*/
     font-family: Helvetica;
@@ -154,15 +154,15 @@
 #sideNote:focus {
   box-shadow: 0 0 5px rgb(186, 0, 0);
   padding: 3px 0px 3px 3px;
-  margin: 25px 1px 3px 0px;
+  margin: 20px 1px 3px 0px;
 }
 
 .checkHead{
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
 .noteHead{
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 
