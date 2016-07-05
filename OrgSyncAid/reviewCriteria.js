@@ -2,7 +2,6 @@
 //This is buggy on turning 'good.' Workaround commented on below
 $(document).ready(function () {
     //initialize class on page load
-    
     if (document.querySelectorAll('input[type="checkbox"]:checked').length > 8) { //BUGPOT15428
                 $('#rev').removeClass('neutral')
                 $('#rev').removeClass('bad')

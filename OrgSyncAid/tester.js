@@ -16,7 +16,9 @@
 1.1.3
 -Make notes box smaller to reveal save button without having to zoom out (must be at 75% zoom)
 -Chnge browser_action tooltip from "Test" to "Cofa yourself"
-
+-All changes made to the checklist and notes will be saved on chrome.storage.sync
+and will be synced to the user's Google account rather than on local storage. 
+If the user is not logged in to their Google account, local storage will be used
 
 //BUGPOT
 //BUGPOT15428: If the number of items in the checklist changes, this will mess up formatting. Location: reviewCriteria.js
@@ -801,9 +803,13 @@ function toCurrency(value){
 $( document ).ready(function(){
 	//bug 15426: checkboxes were inserted twice 
 	
+
+
+
 	//initialize value for notes
 	var value = $('#sideNote')
-	var nSub = (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1)
+	var nSub = "key" + (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1)
+	var saver = {}
 	
 	//initialize values for checklist
 	var aryChecks = [];
@@ -817,7 +823,8 @@ $( document ).ready(function(){
 		};
 
 	var cSub = nSub + "a" //arbitrary letter
-	
+	saver[nSub] = value.val()
+	saver[cSub] = aryChecks
 	
 	//for entering notes once they have been retrieved
 	function valueChanged(newValue) {
@@ -826,8 +833,15 @@ $( document ).ready(function(){
 
 	saveButton.addEventListener('click',function(){
 		//save the notes
-		var value = $('#sideNote').val()
-		localStorage.setItem(nSub,value)
+		var value = $('#sideNote')
+		var nSub = "key" + (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1) 
+		saver[nSub] = value.val();
+
+		chrome.storage.sync.set(saver, function(){
+			if(chrome.runtime.error) {
+				console.log("Runtime error.")
+			}
+		});
 		console.log("Notes for " + nSub + " have been saved.")
 
 		//flash green to indicate to the user that the save was completed
@@ -845,7 +859,12 @@ $( document ).ready(function(){
     	
 		};
 		console.log(aryChecks);
-		localStorage.setItem(cSub, JSON.stringify(aryChecks))
+		saver[cSub] = aryChecks
+		chrome.storage.sync.set(saver, function(){
+			if(chrome.runtime.error) {
+				console.log("Runtime error.");
+			}
+		});
 
 		//flash green
 		$('#review').toggle("highlight", {color: '#CEFFCF'}, 10 );
@@ -855,25 +874,48 @@ $( document ).ready(function(){
 	});
 
 	//send the retrieved notes to be added into the notes section
-	valueChanged(localStorage.getItem(nSub,value));
+	//valueChanged(chrome.storage.sync.get({nSub}));
 	
+	chrome.storage.sync.get(nSub, function(items) {
+		if(!chrome.runtime.error) {
+			console.log(items[nSub]);
+			valueChanged(items[nSub]);
+		}
+	})
+
+
 	//retrieve checkbox array
-	var aryChecks = JSON.parse(localStorage.getItem(cSub,aryChecks))
+	chrome.storage.sync.get(cSub, function(items) {
+		if(!chrome.runtime.error) {
+			var aryChecks = items[cSub];
+			console.log(aryChecks)
+				//load saved checklist
+			document.querySelectorAll('input[type="checkbox"]:checked').length = 0;
+			for(var i = 0; i < $('.checkbox').length; i++){
+        		if (aryChecks[i] === "1"){
+            		$('.checkbox')[i].checked = true;
+        		}else{
+            		$('.checkbox')[i].checked = false;
+        		}
+    		//checklist color won't load. copy from reviewCriteria.js WORKS NOW
+    		if (document.querySelectorAll('input[type="checkbox"]:checked').length > 8) { //BUGPOT15428
+                $('#rev').removeClass('neutral')
+                $('#rev').removeClass('bad')
+                $('#rev').addClass('good')
+                $("#review").css("border-color","#008000")
+    		} else if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
+                $('#rev').removeClass('bad')
+                $('#rev').removeClass('good')
+                $('#rev').addClass('neutral')
+                $("#review").css("border-color","#D79100")
 
+    		} 	
+
+
+			};
+		}
+	})
 	
-	//correctly retrieving. now they checklist needs to be checked
-	//with the corresponding array values
-
-	//load saved checklist
-	for(var i = 0; i < $('.checkbox').length; i++){
-        	if (aryChecks[i] === "1"){
-            	$('.checkbox')[i].checked = true;
-        	}else{
-            	$('.checkbox')[i].checked = false;
-        	}
-    	
-		};
-
 });
 
 
