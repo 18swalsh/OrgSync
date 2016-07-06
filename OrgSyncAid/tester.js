@@ -1,3 +1,5 @@
+
+
 //02035
 //tester.js
 /*
@@ -69,6 +71,7 @@ $('div.response:contains("No, my student group does not currently hold items tha
 $('#review-question-2383092-response > div.row.form_element.question.response:has(div.response:has(p:not(:contains("$0.00"))))').addClass('chargeAdmission')
 $('#review-question-2383092-response > div.row.form_element.question.response > div.response:has(p:not(:contains("n/a")))').removeClass('chargeAdmission');
 $('#review-question-2383092-response > div.row.form_element.question.response > div.response:has(p:not(:contains("N/A")))').removeClass('chargeAdmission');
+
 
 
 $('#review-question-2383092-response > div.row.form_element.question.response.good.chargeAdmission > div.response.good.chargeAdmission').append("<div>Heads up: There's an admission charge.</div>").addClass('alert-box notice');
@@ -239,6 +242,7 @@ $(".ptCheck").append(iframe2);
 iframe2.width = "100%";
 iframe2.height = "500px";
 
+appenderNotice("Funding Applications are not reviewed unless submitted under the name of a Treasurer or President of an SGA recognized student group. The submitting officer must have been certified at a Budget Training Workshop that occurred in the current fiscal year (school year) (DG: 0001-00201301).",23)
 
 
 
@@ -304,7 +308,7 @@ There are 17 line item types with specific DGs and 41 general/non-specific DGs
 31. On-campus Storage Documentation
 33. Name of Program
 35. Program Objective / Purchase Description
-37. jation of Program
+37. Location of Program
 39. Explain why program is Off-campus
 41. Space Rental Justification
 43. Space Rental Documentation
@@ -443,43 +447,62 @@ for(var i = 0; i < $('div.response').length; i++ ){
 }
 
 var ant = 0; //Anticipated Attendance
+var totalReq = 0;
+var str = "";
 //filter
 for (var j = 0; j < aryResponses.length; j++){
 	//line item types
 	if (aryResponses[j] === "3311 In-State Conference" || aryResponses[j] === "3321 Out-of-State Conference" ){
 			Conference(aryResponses[j],aryResponses[j+6],j+6); //line item type and requested amount
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3724 Advertising"){
 			Advertising(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3950 Audio/Visual Equipment"){
 			AV(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3620 Bus Rental"){
 			Bus(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3752 Contractual Services"){
 			Contractual(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "4930 Dues and Fees"){
 			Dues(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3717 Equipment Rental"){
 			eRental(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3716 Equipment Repair"){
 			eRepair(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3746 Food"){
 			Food(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3952 Miscellaneous Supplies"){
 			Misc(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3916 Office Supplies"){
 			oSupplies(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3210 Postage"){
 			Postage(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3718 Printing and Copying"){
 			Printing(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "4970 Space Rental"){
 			Space(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3220 Telephone"){
 			Telephone(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3925 Wearing Apparel"){
 			Wearing(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	}else if(aryResponses[j] === "3953 Office Equipment"){
 			oEquipment(aryResponses[j],aryResponses[j+6],j+6);
+			sumReq(aryResponses[j+6])
 	
 	//Anticipated Attendance
 	}else if(aryResponses[j].search("Anticipated Attendance</div>") !== -1){
@@ -494,15 +517,54 @@ for (var j = 0; j < aryResponses.length; j++){
 	}else if(aryResponses[j] === ""){
 		console.log('next') //placeholder
 	
-	//Anticipated Attendance
+
+	//finalize sum of requests
+	} else if (j === aryResponses.length - 1) {
+		sumReq(0,"go")
 	}
 
 	//highlight all of the errors
 	$('.error').siblings().addClass('bad')
+};
 
+//Check Dates
+function checkDate(reqCheck){ //BUG7516
+	var progDate = $('.response:contains("If funds are needed for certain transactions BEFORE the date of program") .response p').text().trim();
+	var deadline = "Apr 4, 2016"
+	var days = dateDifference(deadline,progDate);
+	days = Math.floor(days);
+	appenderNotice("The date of program is " + days + " days after the sumbission deadline of " + deadline,45);
+	if (reqCheck > 0){
+		//Implement 30/60 Rule
+		if (days < 30) {
+			appenderError("The date of program is less than 30 days away (DG: 0001-09201401).",45 )
+		}else{
+			if (days < 60) {
+				if (reqCheck > 1500) {
+					appenderError("The date of program is less than 60 days away, and the requested amount is over $1,500 (DG: 0001-09201401). Note: An Application will be considered for funding for a Program that exceeds $1,500 AND will occur between 30-60 days before the Date of Program IF an Application has already been submitted during the current school year, AND is for the same Program, containing the same specific item(s), AND the Date of Program is still at least 30 days after the deadline (DG: 0001-03201502).",45 )
+				}
+			//Implement 5 month rule
+			} else if ((days/30) > 5){
+				appenderError("The date of program is more than 5 months away (DG: 0001-09201402).", 45)
+			}
+		}
 
+	}
 
 };
+
+
+//Add up all requested amounts BUG7516
+function sumReq(req,call){
+	if(call === "go"){
+		checkDate(totalReq);
+	}
+	str = req.toString();
+	req = str.replace('$','').trim();
+	req = parseFloat(req);
+	totalReq += req;
+	
+}
 
 
 
@@ -518,6 +580,8 @@ function Conference(LI, reqAmt, l){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
 	}
+	var string = "A conference is one of the line items, so the group must provide a number for anticipated attendance"
+	$('<div class="alert-box notice">' + string + '</div>').insertAfter($('div.response:contains("Anticipated Attendance is needed for General Operations if the line item has a cap which is applied to the number of attendees (i.e. contractual services)") .response'))
 }
 
 //3724 Advertising
@@ -535,7 +599,6 @@ function Advertising(LI, reqAmt, l){
 
 //3950 	AV Equipment (Audio-Visual) 
 function AV(LI, reqAmt, l){
-
 	
 }
 
@@ -558,7 +621,7 @@ function Bus(LI, reqAmt, l){
 function Contractual(LI, reqAmt, l){
 	var cap = 10 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
-	var msg = ('Contractual services are capped at $10 per quantity of anticipated attendance per day of the program (DG: 3752-00201328). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
+	var msg = ('Contractual services are capped at $10 per quantity of anticipated attendance per day of the program (DG: 3752-00201328). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ". Note:  The $10 cap per Anticipated Attendance for one-on-one training will be lifted only when demonstrated to benefit the entire group (DG 3752-10201302)")
 	reqAmt = (reqAmt.replace('$',''));
 	if (cap !== 0){
 		appender(msg, l);
@@ -586,21 +649,20 @@ function Dues(LI, reqAmt, l){
 function eRental(LI, reqAmt, l){
 	var msg = 'Ensure that the group has secure, on-campus storage (DG: 0002-10201502) or a "reasonable expectation of care during the rental period" (DG: 3717-00201330).'
 	appender(msg,l)
-	
 }
 
 
 //3716 Equipment Repair
 function eRepair(LI, reqAmt, l){
-
 	
 }
 
 
 //3746 Food
 function Food(LI, reqAmt, l){
-
-	
+	appenderNotice("Food is only funded for a group for which food is absolutely essential to its mission statement and Program purpose (DG: 3746-00201331).",l-6)
+	var string = "Food is one of the line items, so the group must provide a number for anticipated attendance"
+	$('<div class="alert-box notice">' + string + '</div>').insertAfter($('div.response:contains("Anticipated Attendance is needed for General Operations if the line item has a cap which is applied to the number of attendees (i.e. contractual services)") .response'))
 }
 
 
@@ -610,9 +672,10 @@ function Misc(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Funding for decorations is capped at $1 per quantity of anticipated attendance (DG: 3952-00201332). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ' if the group is seeking funding for decorations')
 	reqAmt = (reqAmt.replace('$',''));
+	appenderNotice("Check to make sure the group has an inventory record and/or secure, on-campus storage", l)
 	if (cap !== 0){
 		appender(msg, l);
-		capCheck(cap, reqAmt,l);	
+		capCheck(cap, reqAmt,l,"misc");	
 	}
 	
 }
@@ -620,42 +683,39 @@ function Misc(LI, reqAmt, l){
 
 //3916 Office Supplies
 function oSupplies(LI, reqAmt, l){
-
-	
+	appenderNotice("The only acceptable documentation is a copy of the Guy Brown order form found at SORC", l+4)
 }
 
 
 //3210 Postage
 function Postage(LI, reqAmt, l){
-
-	
+	appenderNotice("Must demonstrate why email is insufficient (DG: 3210-00201335)", l-4)
 }
 
 
 //3718 Printing and Copying
 function Printing(LI, reqAmt, l){
-
-	
+	appenderNotice("Color paper/ink must be justified (DG: 3718-00201337) as well as higher quality stock (DG: 3718-00201338).", l-4)
 }
 
 
 //4970 Space Rental
 function Space(LI, reqAmt, l){
-
-	
+	appenderNotice(" Venue capacity must be more than Anticipated Attendance (DG 4970-00201340)",l)
+	var string = "Space Rental is one of the line items, so the group must provide a number for anticipated attendance"
+	$('<div class="alert-box notice">' + string + '</div>').insertAfter($('div.response:contains("Anticipated Attendance is needed for General Operations if the line item has a cap which is applied to the number of attendees (i.e. contractual services)") .response'))
 }
 
 
 //3220 Telephone
 function Telephone(LI, reqAmt, l){
-
-	
+	appenderNotice("Must demonstrate a compelling need for office phones (DG 3220-00201343)",l-4)
 }
 
 
 //3925 Wearing Apparel
 function Wearing(LI, reqAmt, l){
-	var msg = 'Ensure that the group has secure, on-campus storage (DG: 0002-10201502) and that the items will be passed on to future members of the group (DG: 3925-00201344)."'
+	var msg = 'Ensure that the group has secure, on-campus storage (DG: 0002-10201502) and that the items will be passed on to future members of the group (DG: 3925-00201344).'
 	appender(msg,l)
 }
 
@@ -664,23 +724,39 @@ function Wearing(LI, reqAmt, l){
 function oEquipment(LI, reqAmt, l){
 	var msg = 'Ensure that the group has secure, on-campus storage (DG: 0002-10201502).'
 	appender(msg,l)
-	
 }
 
-
+//appender appends warnings by default
 function appender(str, loc){
 	$('<div class="alert-box warning">' + str + '</div>').insertAfter($('div.response')[loc]);
 }
 
-function capCheck(cap, reqAmt, loc){
+function appenderNotice(str, loc){
+	$('<div class="alert-box notice">' + str + '</div>').insertAfter($('div.response')[loc]);
+}
+
+function appenderError(str, loc){
+	$('<div class="alert-box error">' + str + '</div>').insertAfter($('div.response')[loc]);
+}
+
+function capCheck(cap, reqAmt, loc, type){
 	if(cap < reqAmt){
 		var alert = "The requested amount seems to be over the cap.";
 		if(cap % 57.64 === 0){ //if it is a bus rental
-		alert = alert + " Note: This cap is applied for each round trip individually."	
+			alert = alert + " Note: This cap is applied for each round trip individually."	
 		}
+
+		if(type === "misc"){
+			alert = alert + " However, this cap only applies to decorations."
+		}
+
 		$('<div class="alert-box error">'+ alert +'</div>').insertAfter($('div.response')[loc]);
 	}
 }
+
+
+
+
 
 //2000 Security / Salaries -----------?
 //Airfare-----------------------------?
@@ -795,7 +871,9 @@ function toCurrency(value){
 	return num;
 }
 
-
+function dateDifference(date1, date2){
+	return ( new Date(date2).getTime() - new Date(date1).getTime() ) / 86400000;
+};
 
 
 //Save notes and checklist in chrome.storage
@@ -919,6 +997,12 @@ $( document ).ready(function(){
 });
 
 
+
+
+
+
+
+//Insert notes into the form submission list page
 
 
 
