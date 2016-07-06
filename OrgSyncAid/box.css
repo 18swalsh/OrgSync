@@ -5,6 +5,7 @@
 	padding:10px 36px;
 	margin:10px;
 }
+
 .alert-box span {
 	font-weight:bold;
 	text-transform:uppercase;
@@ -17,6 +18,25 @@
 	background:#e9ffd9 url('chrome-extension://__MSG_@@extension_id__/images/success.png') no-repeat 10px 50%;
 	border:1px solid #a6ca8a;
 }
+
+.dGuide {
+	
+	font-style: italic;
+	text-align: center;
+	border-bottom: 1px solid #aaa;
+	color: #aaa;
+	margin-bottom: 5px;
+}
+
+.DGS{
+	background:#e3f7eb url('chrome-extension://__MSG_@@extension_id__/images/DGS.png') no-repeat 10px 50%;
+	border:1px solid #f5aca6;
+}
+
+.success:hover{
+
+}
+
 .successRow{
 	background:#e9ffd9
 }

@@ -73,9 +73,6 @@ $('#review-question-2383092-response > div.row.form_element.question.response > 
 $('#review-question-2383092-response > div.row.form_element.question.response > div.response:has(p:not(:contains("N/A")))').removeClass('chargeAdmission');
 
 
-
-$('#review-question-2383092-response > div.row.form_element.question.response.good.chargeAdmission > div.response.good.chargeAdmission').append("<div>Heads up: There's an admission charge.</div>").addClass('alert-box notice');
-
 //add onMouseover to each link
 //BUG:not every link works for some reason
 //add onMouseover to the links at the top of the page
@@ -242,7 +239,7 @@ $(".ptCheck").append(iframe2);
 iframe2.width = "100%";
 iframe2.height = "500px";
 
-appenderNotice("Funding Applications are not reviewed unless submitted under the name of a Treasurer or President of an SGA recognized student group. The submitting officer must have been certified at a Budget Training Workshop that occurred in the current fiscal year (school year) (DG: 0001-00201301).",23)
+appenderdGuide("DG: 0001-00201301","Funding Applications are not reviewed unless submitted under the name of a Treasurer or President of an SGA recognized student group. The submitting officer must have been certified at a Budget Training Workshop that occurred in the current fiscal year (school year).",23)
 
 
 
@@ -533,7 +530,7 @@ function checkDate(reqCheck){ //BUG7516
 	var deadline = "Apr 4, 2016"
 	var days = dateDifference(deadline,progDate);
 	days = Math.floor(days);
-	appenderNotice("The date of program is " + days + " days after the sumbission deadline of " + deadline,45);
+	appenderNotice("The date of program is <strong>" + days + " days</strong> after the sumbission deadline of " + deadline,45);
 	if (reqCheck > 0){
 		//Implement 30/60 Rule
 		if (days < 30) {
@@ -575,6 +572,7 @@ function Conference(LI, reqAmt, l){
 	var cap = 50 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
 	var msg = ('Conference Fees are capped at $50 per quantity of anticipated attendance (DG: 3311-10201401). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt);
+	appenderNotice("Food and lodging cannot be included in the conference fee (DG: 3311-00201320), and the conference fee cannot be a fundraiser for the parent organization, or for a political campaign/party (DG: 331100201321)",l+2);
 	reqAmt = (reqAmt.replace('$',''));
 	if (cap !== 0){
 		appender(msg, l);
@@ -588,6 +586,8 @@ function Conference(LI, reqAmt, l){
 function Advertising(LI, reqAmt, l){
 	var cap = parseInt(ant)
 	var capAmt =  toCurrency(ant);
+	appenderNotice("Advertising that involves Printing and Copying materials will also be reviewed as 3718 Printing and Copying (DG: 3727-00201325)",l-6);
+	appenderNotice("General advertising for a group is not funded unless it is for a banner, table throw, or similar item to stay with the group (DG: 3724-11201406), off-campus advertising is not funded (DG: 3724-00201324), and newspaper advertisements are not funded (DG: 3724-09201304)",l-4);
 	var msg = ('Advertising is capped at $1 per quantity of anticipated attendance (DG: 3724-00201322). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
 	if (cap !== 0){
@@ -608,6 +608,9 @@ function Bus(LI, reqAmt, l){
 	var cap = 57.64 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
 	var msg = ('All forms of transportation are capped at $57.64 per quantity of anticipated attendance (DG: 0001-11201403). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
+	appenderNotice("Must be rented from Motor transportation Services or Shuttle UM (DG: 0002-00201317). This is the only acceptable documentation.",l+2);
+	appenderNotice("Must submit a Google Map screenshot showing route and distance to me traveled (in miles) (DG: 3620-00201327).",l+2);
+
 	reqAmt = (reqAmt.replace('$',''));
 	if (cap !== 0){
 		appender(msg, l);
@@ -621,6 +624,7 @@ function Bus(LI, reqAmt, l){
 function Contractual(LI, reqAmt, l){
 	var cap = 10 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
+	appenderNotice("Any price must be final and exact. In addition, a student member of an organization who is providing a service that is directly related to the mission of that organization may not receive monetary compensation from the SAF without pre-approval from the SGA Legislature (DG: 3752-02201402)",l+4);
 	var msg = ('Contractual services are capped at $10 per quantity of anticipated attendance per day of the program (DG: 3752-00201328). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ". Note:  The $10 cap per Anticipated Attendance for one-on-one training will be lifted only when demonstrated to benefit the entire group (DG 3752-10201302)")
 	reqAmt = (reqAmt.replace('$',''));
 	if (cap !== 0){
@@ -635,6 +639,7 @@ function Contractual(LI, reqAmt, l){
 function Dues(LI, reqAmt, l){
 	var cap = 10 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
+	appenderNotice("If the group is requesting dues, they must demonstrate that the expenses are for the group as a whole, not individual memberships (DG: 4930-00201329)",l+2);
 	var msg = ('Non-conference, event-based fees are capped at $10 per quantity of anticipated attendance (DG: 0002-00201316). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
 	if (cap !== 0){
@@ -670,7 +675,7 @@ function Food(LI, reqAmt, l){
 function Misc(LI, reqAmt, l){
 	var cap = 1 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
-	var msg = ('Funding for decorations is capped at $1 per quantity of anticipated attendance (DG: 3952-00201332). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ' if the group is seeking funding for decorations')
+	var msg = ('Funding for <strong>decorations</strong> is capped at $1 per quantity of anticipated attendance (DG: 3952-00201332). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ' if the group is seeking funding for decorations')
 	reqAmt = (reqAmt.replace('$',''));
 	appenderNotice("Check to make sure the group has an inventory record and/or secure, on-campus storage", l)
 	if (cap !== 0){
@@ -683,25 +688,27 @@ function Misc(LI, reqAmt, l){
 
 //3916 Office Supplies
 function oSupplies(LI, reqAmt, l){
-	appenderNotice("The only acceptable documentation is a copy of the Guy Brown order form found at SORC", l+4)
+	appenderNotice("The only acceptable documentation is a copy of the <strong>Guy Brown</strong> order form found at SORC. If an item is not found in the catalog at SORC, a screenshot from an alternate vendor must be submitted.", l+4)
 }
 
 
 //3210 Postage
 function Postage(LI, reqAmt, l){
-	appenderNotice("Must demonstrate why email is insufficient (DG: 3210-00201335)", l-4)
+	appenderNotice("Must demonstrate why email is insufficient (DG: 3210-00201335). The size of the mailing list must also be included.", l-4)
 }
 
 
 //3718 Printing and Copying
 function Printing(LI, reqAmt, l){
+	appenderNotice("Items that will be used for advertising will also be reviewed under 3724 Advertising standards.",l-6);
 	appenderNotice("Color paper/ink must be justified (DG: 3718-00201337) as well as higher quality stock (DG: 3718-00201338).", l-4)
 }
 
 
 //4970 Space Rental
 function Space(LI, reqAmt, l){
-	appenderNotice(" Venue capacity must be more than Anticipated Attendance (DG 4970-00201340)",l)
+	appenderNotice("If the space rental is off-campus, the group must jsutify why an on-campus provider is insufficient (DG: 3950-00201326)",l+4)
+	appenderNotice("The anticipated attendance must not be greater than the venue capacity", l+2)
 	var string = "Space Rental is one of the line items, so the group must provide a number for anticipated attendance"
 	$('<div class="alert-box notice">' + string + '</div>').insertAfter($('div.response:contains("Anticipated Attendance is needed for General Operations if the line item has a cap which is applied to the number of attendees (i.e. contractual services)") .response'))
 }
@@ -710,8 +717,9 @@ function Space(LI, reqAmt, l){
 //3220 Telephone
 function Telephone(LI, reqAmt, l){
 	appenderNotice("Must demonstrate a compelling need for office phones (DG 3220-00201343)",l-4)
+	appender("Phone lines are <strong>only for groups with office space outside of Stamp</strong> (DG: 0001-00201307)",l+4)
+	appenderNotice("Past phone bills for the same line can serve as documentation",l+4)
 }
-
 
 //3925 Wearing Apparel
 function Wearing(LI, reqAmt, l){
@@ -726,6 +734,78 @@ function oEquipment(LI, reqAmt, l){
 	appender(msg,l)
 }
 
+//General
+//Previously funded
+if (aryResponses[51] ===  "Yes") {
+	appender("Any aspect of a program or application that has been previously funded will not be funded again for that same instance of the program or application (DG: 0001-11201501).", 51)
+}
+
+//Admission Charge ---Had some time to kill when I made this little piece. I wonder if it'll slow my program down...
+if (aryResponses[49] !==  "No answer submitted" 
+		&& aryResponses[49].toLowerCase() !== "no admission charge"
+		&& aryResponses[49].toLowerCase() !== "no admission charge."
+		&& aryResponses[49].toLowerCase() !== "no admissions charge"
+		&& aryResponses[49].toLowerCase() !== "no admissions charge."
+		&& aryResponses[49].toLowerCase() !== "no admission cost."
+		&& aryResponses[49].toLowerCase() !== "no admission cost"
+		&& aryResponses[49].toLowerCase() !== "no admissions cost."
+		&& aryResponses[49].toLowerCase() !== "no admissions cost"
+		&& aryResponses[49].toLowerCase() !== "no admission"
+		&& aryResponses[49].toLowerCase() !== "no admission."
+		&& aryResponses[49].toLowerCase() !== "no charge"
+		&& aryResponses[49].toLowerCase() !== "no charge."
+		&& aryResponses[49].toLowerCase() !== "free"
+		&& aryResponses[49].toLowerCase() !== "free."
+		&& aryResponses[49].toLowerCase() !== "$0"
+		&& aryResponses[49].toLowerCase() !== "$0."
+		&& aryResponses[49].toLowerCase() !== "0"
+		&& aryResponses[49].toLowerCase() !== "0."
+		&& aryResponses[49].toLowerCase() !== "$0.00"
+		&& aryResponses[49].toLowerCase() !== "$0.00."
+		&& aryResponses[49].toLowerCase() !== "none"
+		&& aryResponses[49].toLowerCase() !== "none."
+		&& aryResponses[49].toLowerCase() !== "we are not"
+		&& aryResponses[49].toLowerCase() !== "we are not."
+		&& aryResponses[49].toLowerCase() !== "this is a free event"
+		&& aryResponses[49].toLowerCase() !== "this is a free event."
+		&& aryResponses[49].toLowerCase() !== "free event"
+		&& aryResponses[49].toLowerCase() !== "free event."
+		&& aryResponses[49].toLowerCase() !== "there is no admission charge"
+		&& aryResponses[49].toLowerCase() !== "there is no admission charge."
+		&& aryResponses[49].toLowerCase() !== "there will be no admission charge"
+		&& aryResponses[49].toLowerCase() !== "there will be no admission charge."
+		&& aryResponses[49].toLowerCase() !== "we will not charge admission"
+		&& aryResponses[49].toLowerCase() !== "we will not charge admission."
+		&& aryResponses[49].toLowerCase() !== "we will not be charging admission"
+		&& aryResponses[49].toLowerCase() !== "we will not be charging admission."	
+		&& aryResponses[49].toLowerCase() !== "no admission will be charged"
+		&& aryResponses[49].toLowerCase() !== "no admission will be charged."
+		&& aryResponses[49].toLowerCase() !== "n/a" 
+		&& aryResponses[49].toLowerCase() !== "n/a." 
+		&& aryResponses[49].toLowerCase() !== "na."
+		&& aryResponses[49].toLowerCase() !== "na" ) {
+	appender("Programs utilizing any amount of SGA funding may only charge admission to cover the per-person cost of expenses directly incurred by the event which are not funded by the SGA. Programs with all other admissions charges are not funded. Programs may not otherwise receive any form of payment from undergraduate students. Mandatory registration, fees, donations, and other forms of payment are not permitted (DG: 0001-02201604)", 49)
+}
+
+//off-campus programs
+if (aryResponses[37].toLowerCase() !==  "on campus"
+	&& aryResponses[37].toLowerCase() !==  "stamp"
+	&& aryResponses[37].toLowerCase() !==  "stamp student union"
+	&& aryResponses[37].toLowerCase() !==  "clarice smith performing arts center"
+	&& aryResponses[37].toLowerCase() !==  "cspac"
+	&& aryResponses[37].toLowerCase() !==  "pg room"
+	&& aryResponses[37].toLowerCase() !==  "terpzone") {
+	appender("If a group is requesting funding for an off-campus program, the group must demonstrate why hosting the event on campus is insufficient (DG: 0001-03201601)", 37)
+}else{
+	//space required
+	appenderNotice("<i>Groups must provide proof of a reservation before asking for any funding for a program or event that requires a physical space. If the group has not yet reserved the space, the group must provide sufficient reasoning for why the space has not yet been reserved (DG: 0001-04201601).</i>",37)
+}
+
+//mission vs. purpose/description
+appenderNotice("Programs whose purpose and description are not apparently relevant to the SGA-recognized Mission Statement of the group are not funded (DG: 002-00201308).",35)
+
+
+
 //appender appends warnings by default
 function appender(str, loc){
 	$('<div class="alert-box warning">' + str + '</div>').insertAfter($('div.response')[loc]);
@@ -739,6 +819,14 @@ function appenderError(str, loc){
 	$('<div class="alert-box error">' + str + '</div>').insertAfter($('div.response')[loc]);
 }
 
+function appenderSuccess(str, loc){
+	$('<div class="alert-box success">' + str + '</div>').insertAfter($('div.response')[loc]);
+}
+
+function appenderdGuide(dg, str, loc){
+	$('<div class="alert-box DGS">' + dg + '</div><div>' + str + '</div>').insertAfter($('div.response')[loc]);
+}
+
 function capCheck(cap, reqAmt, loc, type){
 	if(cap < reqAmt){
 		var alert = "The requested amount seems to be over the cap.";
@@ -747,7 +835,7 @@ function capCheck(cap, reqAmt, loc, type){
 		}
 
 		if(type === "misc"){
-			alert = alert + " However, this cap only applies to decorations."
+			alert = alert + " However, <strong>this cap only applies to decorations.</strong> Decorations are items that do not serve a practical purpose, and include but are not limited to: ribbons, streamers, balloon/baloon weights, flowers, and vases."
 		}
 
 		$('<div class="alert-box error">'+ alert +'</div>').insertAfter($('div.response')[loc]);
@@ -838,7 +926,8 @@ $('#save').on({
 
 
 //hide unwanted elements on the main screen
-if( $('.page-title').text() === "SGA Funding Application - April 2016" ){
+//if( $('.page-title').text() === "SGA Funding Application - April 2016" ){
+if($('.action-title h1').text() !== "Submission Review"){	
 	//$('#save').hide();
 	//$('#review').hide();
 	$('#togButton').hide();
@@ -1014,25 +1103,47 @@ These are the only elements on this page with that class
 
 
 //get all of the notes from chrome.storage and insert them into the table
+
 $('div > div.media-body > h4 > a').each(function(){
 	var str = $(this).attr('href')
 	var key = "key" + str.slice(str.lastIndexOf('/')+1, str.lastIndexOf('?'))
+	var cKey = key + "a";
 	key = key.toString();
+	cKey = cKey.toString();
 	console.log(key)
+	console.log(cKey)
 
 	chrome.storage.sync.get(key, function(items) {
 			if(!chrome.runtime.error) {
 				console.log(items[key]);
 				var searchKey = key.slice(3);
-				var newRow = $('<tr class="tableNote"><td class="alert-box success tableNote">' + items[key] + '</td><</tr>')
+				var newRow = $('<tr class="tableNote"><td class="alert-box success">' + items[key] + '</td><</tr>')
 				if(typeof(items[key]) !== "undefined"){
 					newRow.insertAfter($('tr a[href*=' + searchKey + ']' ))
 				};
 			}
 	})
+	/*This will add the checklist to the page ***Working Feature Disabled***
+	chrome.storage.sync.get(cKey, function(items) {
+		if(!chrome.runtime.error) {
+			var nChecks = items[cKey];
+			console.log("nChecks: " + nChecks);
+			var cSum = 0;
+			for (var i = 0; i < 9; i++){  //BUGPOT15428
+				if (nChecks[i] === "1"){
+					cSum += 1;
+				}
+			}
+			console.log('sum: ' + cSum)
+				var searchKey = key.slice(3);
+				var newRow = $('<tr><td class="smallFont">Checklist: ' + cSum + '/9</td><</tr>') //BUGPOT15428
+				if(typeof(items[cKey]) !== "undefined"){
+					newRow.insertAfter($('tr a[href*=' + searchKey + ']' ))
+				};
+		}
+	})
+	*/
 })
-
-
 
 
 
