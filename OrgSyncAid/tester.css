@@ -213,3 +213,25 @@ input[type=checkbox] {width: 14px; height: 14px;}
   background: -webkit-gradient(linear, left top, left bottom, from(#1BCF6F), to(#CEFFCF));
   background: -moz-linear-gradient(top,  #1BCF6F,  #CEFFCF);
 }
+
+.tableNote{
+  margin-top: 3px;
+  margin-bottom: 3px;
+  color: #4F8A10;
+  background-color: #DFF2BF;
+  border-top-style: solid;
+  width: auto;
+  box-sizing: border-box;
+
+padding: 20px 20px 10px;
+margin: 10px 0 20px;
+border: 1px solid #ccc;
+border-radius: 4px;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-o-border-radius: 4px;
+-webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, .3);
+-moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, .3);
+box-shadow: inset 0px 1px 1px rgba(0, 0, 0, .3);
+}
+}

@@ -17,6 +17,10 @@
 	background:#e9ffd9 url('chrome-extension://__MSG_@@extension_id__/images/success.png') no-repeat 10px 50%;
 	border:1px solid #a6ca8a;
 }
+.successRow{
+	background:#e9ffd9
+}
+
 .warning {
 	background:#fff8c4 url('chrome-extension://__MSG_@@extension_id__/images/warning.png') no-repeat 10px 50%;
 	border:1px solid #f2c779;

@@ -118,3 +118,6 @@ for(var i = 0; i < $('div.response').length; i++ ){
 //2 possible solutions:
 //1. Find aryResponses at the beginning of the program
 //2. Assign a class to all of the original divs at the beginning
+
+
+$('<tr class="line-item"><td class="list-item-title><div class="media ">hey I want this to stretch across the whole page and onto the next line to see if this is going to be a good way into insert the div. Maybe if I type for long enough, itll make it ono 3 lines. But probably not. Im not very long-winded. Or am I?</div></td></tr>').insertAfter($('.list-item')[0])

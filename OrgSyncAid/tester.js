@@ -913,6 +913,7 @@ $( document ).ready(function(){
 		//save the notes
 		var value = $('#sideNote')
 		var nSub = "key" + (window.location.pathname).slice((window.location.pathname).lastIndexOf('/')+1) 
+		console.log(nSub)
 		saver[nSub] = value.val();
 
 		chrome.storage.sync.set(saver, function(){
@@ -1004,22 +1005,32 @@ $( document ).ready(function(){
 
 //Insert notes into the form submission list page
 
+/*Notes:
+
+Each submission is a <tr class="list-item">
+These are the only elements on this page with that class
+
+*/
 
 
+//get all of the notes from chrome.storage and insert them into the table
+$('div > div.media-body > h4 > a').each(function(){
+	var str = $(this).attr('href')
+	var key = "key" + str.slice(str.lastIndexOf('/')+1, str.lastIndexOf('?'))
+	key = key.toString();
+	console.log(key)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	chrome.storage.sync.get(key, function(items) {
+			if(!chrome.runtime.error) {
+				console.log(items[key]);
+				var searchKey = key.slice(3);
+				var newRow = $('<tr class="tableNote"><td class="alert-box success tableNote">' + items[key] + '</td><</tr>')
+				if(typeof(items[key]) !== "undefined"){
+					newRow.insertAfter($('tr a[href*=' + searchKey + ']' ))
+				};
+			}
+	})
+})
 
 
 
