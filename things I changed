@@ -1,0 +1,12 @@
+appenderdGuide("DG: 0001-00201301","Funding Applications are not reviewed unless submitted under the name of a Treasurer or President of an SGA recognized student group. The submitting officer must have been certified at a Budget Training Workshop that occurred in the current fiscal year (school year).",23)
+
+appenderdGuide("DG: 0001-04201601","Groups must provide proof of a reservation before asking for any funding for a program or event that requires a physical space. If the group has not yet reserved the space, the group must provide sufficient reasoning for why the space has not yet been reserved.",37)
+}
+
+//mission vs. purpose/description
+appenderdGuide("DG: 0002-00201308","Programs whose purpose and description are not apparently relevant to the SGA-recognized Mission Statement of the group are not funded.",35)
+
+ce("For contractual services, any price must be final and exact. In a
+
+
+e not funded (DG: 002-00201308).",35) --> 0002
