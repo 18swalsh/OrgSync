@@ -10,3 +10,61 @@ ce("For contractual services, any price must be final and exact. In a
 
 
 e not funded (DG: 002-00201308).",35) --> 0002
+
+
+.alert-box {
+	color:#555;
+	border-radius:10px;
+	font-family:Tahoma,Geneva,Arial,sans-serif;font-size:14px;
+	padding:10px 36px;
+	margin:10px;
+}
+
+.alert-box span {
+	font-weight:bold;
+	text-transform:uppercase;
+}
+.error {
+	background:#ffecec url('chrome-extension://__MSG_@@extension_id__/images/error.png') no-repeat 10px 50%;
+	border:1px solid #f5aca6;
+}
+.success {
+	background:#8B668B url('chrome-extension://__MSG_@@extension_id__/images/success.png') no-repeat 10px 50%;
+	border:1px solid #a6ca8a;
+}
+
+.dGuide {
+	background: #8B668B url('chrome-extension://__MSG_@@extension_id__/images/DGS.png') no-repeat 10px 50%;
+	border:1px solid #2E0854;
+	text-align: center;
+	color: white;
+	margin-bottom: 5px;
+}
+
+.DGS{
+	border-bottom: 1px solid white;
+}
+
+.success:hover{
+
+}
+
+.successRow{
+	background:#e9ffd9
+}
+
+.warning {
+	background:#fff8c4 url('chrome-extension://__MSG_@@extension_id__/images/warning.png') no-repeat 10px 50%;
+	border:1px solid #f2c779;
+}
+.notice {
+	background:#e3f7fc url('chrome-extension://__MSG_@@extension_id__/images/notice.png') no-repeat 10px 50%;
+	border:1px solid #8ed9f6;
+}
+
+
+function appenderdGuide(dg, str, loc){
+	$('<div class="alert-box dGuide"><div class="DGS">' + dg + '</div><div>' + str + '</div></div>').insertAfter($('div.response')[loc]);
+}
+
+
