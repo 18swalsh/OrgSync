@@ -15,22 +15,33 @@
 	border:1px solid #f5aca6;
 }
 .success {
-	background:#e9ffd9 url('chrome-extension://__MSG_@@extension_id__/images/success.png') no-repeat 10px 50%;
+	background:#BDFCC9 url('chrome-extension://__MSG_@@extension_id__/images/success.png') no-repeat 10px 50%;
 	border:1px solid #a6ca8a;
+	padding: 10px, 18px;
+}
+.note {
+	background:#e3f7fc url('chrome-extension://__MSG_@@extension_id__/images/comment.png') no-repeat 10px 50%;
+	border:1px solid #8ed9f6;
 }
 
 .dGuide {
-	
-	font-style: italic;
+	background: #8B668B url('chrome-extension://__MSG_@@extension_id__/images/long.png') no-repeat 10px 50%;
+	border:1px solid #2E0854;
 	text-align: center;
-	border-bottom: 1px solid #aaa;
-	color: #aaa;
+	overflow: hidden;
 	margin-bottom: 5px;
+	height: 40px;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.dGuide:hover{
+	height:100%;
+	color: white;
 }
 
 .DGS{
-	background:#e3f7eb url('chrome-extension://__MSG_@@extension_id__/images/DGS.png') no-repeat 10px 50%;
-	border:1px solid #f5aca6;
+	font-weight: bold;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.5);;
 }
 
 .success:hover{
@@ -49,5 +60,3 @@
 	background:#e3f7fc url('chrome-extension://__MSG_@@extension_id__/images/notice.png') no-repeat 10px 50%;
 	border:1px solid #8ed9f6;
 }
-
-

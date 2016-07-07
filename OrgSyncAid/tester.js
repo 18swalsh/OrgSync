@@ -21,6 +21,11 @@
 -All changes made to the checklist and notes will be saved on chrome.storage.sync
 and will be synced to the user's Google account rather than on local storage. 
 If the user is not logged in to their Google account, local storage will be used
+1.2.0
+-Comments appear in the corresponding table row in the sumbissions page
+1.3.0
+-New DG appender (purple boxes)
+-Any alert box can be clicked to add the contents into the Notes
 
 //BUGPOT
 //BUGPOT15428: If the number of items in the checklist changes, this will mess up formatting. Location: reviewCriteria.js
@@ -624,7 +629,7 @@ function Bus(LI, reqAmt, l){
 function Contractual(LI, reqAmt, l){
 	var cap = 10 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
-	appenderNotice("Any price must be final and exact. In addition, a student member of an organization who is providing a service that is directly related to the mission of that organization may not receive monetary compensation from the SAF without pre-approval from the SGA Legislature (DG: 3752-02201402)",l+4);
+	appenderNotice("For contractual services, any price must be final and exact. In addition, a student member of an organization who is providing a service that is directly related to the mission of that organization may not receive monetary compensation from the SAF without pre-approval from the SGA Legislature (DG: 3752-02201402)",l+4);
 	var msg = ('Contractual services are capped at $10 per quantity of anticipated attendance per day of the program (DG: 3752-00201328). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ". Note:  The $10 cap per Anticipated Attendance for one-on-one training will be lifted only when demonstrated to benefit the entire group (DG 3752-10201302)")
 	reqAmt = (reqAmt.replace('$',''));
 	if (cap !== 0){
@@ -707,7 +712,7 @@ function Printing(LI, reqAmt, l){
 
 //4970 Space Rental
 function Space(LI, reqAmt, l){
-	appenderNotice("If the space rental is off-campus, the group must jsutify why an on-campus provider is insufficient (DG: 3950-00201326)",l+4)
+	appenderNotice("If the space rental is off-campus, the group must justify why an on-campus provider is insufficient (DG: 3950-00201326)",l+4)
 	appenderNotice("The anticipated attendance must not be greater than the venue capacity", l+2)
 	var string = "Space Rental is one of the line items, so the group must provide a number for anticipated attendance"
 	$('<div class="alert-box notice">' + string + '</div>').insertAfter($('div.response:contains("Anticipated Attendance is needed for General Operations if the line item has a cap which is applied to the number of attendees (i.e. contractual services)") .response'))
@@ -742,89 +747,93 @@ if (aryResponses[51] ===  "Yes") {
 
 //Admission Charge ---Had some time to kill when I made this little piece. I wonder if it'll slow my program down...
 if (aryResponses[49] !==  "No answer submitted" 
-		&& aryResponses[49].toLowerCase() !== "no admission charge"
-		&& aryResponses[49].toLowerCase() !== "no admission charge."
-		&& aryResponses[49].toLowerCase() !== "no admissions charge"
-		&& aryResponses[49].toLowerCase() !== "no admissions charge."
-		&& aryResponses[49].toLowerCase() !== "no admission cost."
-		&& aryResponses[49].toLowerCase() !== "no admission cost"
-		&& aryResponses[49].toLowerCase() !== "no admissions cost."
-		&& aryResponses[49].toLowerCase() !== "no admissions cost"
-		&& aryResponses[49].toLowerCase() !== "no admission"
-		&& aryResponses[49].toLowerCase() !== "no admission."
-		&& aryResponses[49].toLowerCase() !== "no charge"
-		&& aryResponses[49].toLowerCase() !== "no charge."
-		&& aryResponses[49].toLowerCase() !== "free"
-		&& aryResponses[49].toLowerCase() !== "free."
-		&& aryResponses[49].toLowerCase() !== "$0"
-		&& aryResponses[49].toLowerCase() !== "$0."
-		&& aryResponses[49].toLowerCase() !== "0"
-		&& aryResponses[49].toLowerCase() !== "0."
-		&& aryResponses[49].toLowerCase() !== "$0.00"
-		&& aryResponses[49].toLowerCase() !== "$0.00."
-		&& aryResponses[49].toLowerCase() !== "none"
-		&& aryResponses[49].toLowerCase() !== "none."
-		&& aryResponses[49].toLowerCase() !== "we are not"
-		&& aryResponses[49].toLowerCase() !== "we are not."
-		&& aryResponses[49].toLowerCase() !== "this is a free event"
-		&& aryResponses[49].toLowerCase() !== "this is a free event."
-		&& aryResponses[49].toLowerCase() !== "free event"
-		&& aryResponses[49].toLowerCase() !== "free event."
-		&& aryResponses[49].toLowerCase() !== "there is no admission charge"
-		&& aryResponses[49].toLowerCase() !== "there is no admission charge."
-		&& aryResponses[49].toLowerCase() !== "there will be no admission charge"
-		&& aryResponses[49].toLowerCase() !== "there will be no admission charge."
-		&& aryResponses[49].toLowerCase() !== "we will not charge admission"
-		&& aryResponses[49].toLowerCase() !== "we will not charge admission."
-		&& aryResponses[49].toLowerCase() !== "we will not be charging admission"
-		&& aryResponses[49].toLowerCase() !== "we will not be charging admission."	
-		&& aryResponses[49].toLowerCase() !== "no admission will be charged"
-		&& aryResponses[49].toLowerCase() !== "no admission will be charged."
-		&& aryResponses[49].toLowerCase() !== "n/a" 
-		&& aryResponses[49].toLowerCase() !== "n/a." 
-		&& aryResponses[49].toLowerCase() !== "na."
-		&& aryResponses[49].toLowerCase() !== "na" ) {
+		&& aryResponses[49] !== "no admission charge"
+		&& aryResponses[49] !== "no admission charge."
+		&& aryResponses[49] !== "no admissions charge"
+		&& aryResponses[49] !== "no admissions charge."
+		&& aryResponses[49] !== "no admission cost."
+		&& aryResponses[49] !== "no admission cost"
+		&& aryResponses[49] !== "no admissions cost."
+		&& aryResponses[49] !== "no admissions cost"
+		&& aryResponses[49] !== "no admission"
+		&& aryResponses[49] !== "no admission."
+		&& aryResponses[49] !== "no charge"
+		&& aryResponses[49] !== "no charge."
+		&& aryResponses[49] !== "free"
+		&& aryResponses[49] !== "free."
+		&& aryResponses[49] !== "$0"
+		&& aryResponses[49] !== "$0."
+		&& aryResponses[49] !== "0"
+		&& aryResponses[49] !== "0."
+		&& aryResponses[49] !== "$0.00"
+		&& aryResponses[49] !== "$0.00."
+		&& aryResponses[49] !== "none"
+		&& aryResponses[49] !== "none."
+		&& aryResponses[49] !== "we are not"
+		&& aryResponses[49] !== "we are not."
+		&& aryResponses[49] !== "this is a free event"
+		&& aryResponses[49] !== "this is a free event."
+		&& aryResponses[49] !== "free event"
+		&& aryResponses[49] !== "free event."
+		&& aryResponses[49] !== "there is no admission charge"
+		&& aryResponses[49] !== "there is no admission charge."
+		&& aryResponses[49] !== "there will be no admission charge"
+		&& aryResponses[49] !== "there will be no admission charge."
+		&& aryResponses[49] !== "we will not charge admission"
+		&& aryResponses[49] !== "we will not charge admission."
+		&& aryResponses[49] !== "we will not be charging admission"
+		&& aryResponses[49] !== "we will not be charging admission."	
+		&& aryResponses[49] !== "no admission will be charged"
+		&& aryResponses[49] !== "no admission will be charged."
+		&& aryResponses[49] !== "n/a" 
+		&& aryResponses[49] !== "n/a." 
+		&& aryResponses[49] !== "na."
+		&& aryResponses[49] !== "na" ) {
 	appender("Programs utilizing any amount of SGA funding may only charge admission to cover the per-person cost of expenses directly incurred by the event which are not funded by the SGA. Programs with all other admissions charges are not funded. Programs may not otherwise receive any form of payment from undergraduate students. Mandatory registration, fees, donations, and other forms of payment are not permitted (DG: 0001-02201604)", 49)
 }
 
 //off-campus programs
-if (aryResponses[37].toLowerCase() !==  "on campus"
-	&& aryResponses[37].toLowerCase() !==  "stamp"
-	&& aryResponses[37].toLowerCase() !==  "stamp student union"
-	&& aryResponses[37].toLowerCase() !==  "clarice smith performing arts center"
-	&& aryResponses[37].toLowerCase() !==  "cspac"
-	&& aryResponses[37].toLowerCase() !==  "pg room"
-	&& aryResponses[37].toLowerCase() !==  "terpzone") {
+if (aryResponses[37] !==  "on campus"
+	&& aryResponses[37] !==  "stamp"
+	&& aryResponses[37] !==  "stamp student union"
+	&& aryResponses[37] !==  "clarice smith performing arts center"
+	&& aryResponses[37] !==  "cspac"
+	&& aryResponses[37] !==  "pg room"
+	&& aryResponses[37] !==  "terpzone") {
 	appender("If a group is requesting funding for an off-campus program, the group must demonstrate why hosting the event on campus is insufficient (DG: 0001-03201601)", 37)
 }else{
 	//space required
-	appenderNotice("<i>Groups must provide proof of a reservation before asking for any funding for a program or event that requires a physical space. If the group has not yet reserved the space, the group must provide sufficient reasoning for why the space has not yet been reserved (DG: 0001-04201601).</i>",37)
+	appenderdGuide("DG: 0001-04201601","Groups must provide proof of a reservation before asking for any funding for a program or event that requires a physical space. If the group has not yet reserved the space, the group must provide sufficient reasoning for why the space has not yet been reserved.",37)
 }
 
 //mission vs. purpose/description
-appenderNotice("Programs whose purpose and description are not apparently relevant to the SGA-recognized Mission Statement of the group are not funded (DG: 002-00201308).",35)
+appenderdGuide("DG: 0002-00201308","Programs whose purpose and description are not apparently relevant to the SGA-recognized Mission Statement of the group are not funded.",35)
 
 
 
 //appender appends warnings by default
 function appender(str, loc){
-	$('<div class="alert-box warning">' + str + '</div>').insertAfter($('div.response')[loc]);
+	$('<div class="alert-box warning" style="cursor: pointer">' + str + '</div>').insertAfter($('div.response')[loc]);
 }
 
 function appenderNotice(str, loc){
-	$('<div class="alert-box notice">' + str + '</div>').insertAfter($('div.response')[loc]);
+	$('<div class="alert-box notice" style="cursor: pointer">' + str + '</div>').insertAfter($('div.response')[loc]);
 }
 
 function appenderError(str, loc){
-	$('<div class="alert-box error">' + str + '</div>').insertAfter($('div.response')[loc]);
+	$('<div class="alert-box error" style="cursor: pointer">' + str + '</div>').insertAfter($('div.response')[loc]);
 }
 
 function appenderSuccess(str, loc){
 	$('<div class="alert-box success">' + str + '</div>').insertAfter($('div.response')[loc]);
 }
 
+function appenderNote(str, loc){
+	$('<div class="alert-box note">' + str + '</div>').insertAfter($('div.response')[loc]);
+}
+
 function appenderdGuide(dg, str, loc){
-	$('<div class="alert-box DGS">' + dg + '</div><div>' + str + '</div>').insertAfter($('div.response')[loc]);
+	$('<div class="alert-box dGuide" style="cursor: pointer"><div class="DGS" style="cursor: pointer">' + dg + '</div><div style="cursor: pointer">' + str + '</div></div>').insertAfter($('div.response')[loc]);
 }
 
 function capCheck(cap, reqAmt, loc, type){
@@ -1117,7 +1126,9 @@ $('div > div.media-body > h4 > a').each(function(){
 			if(!chrome.runtime.error) {
 				console.log(items[key]);
 				var searchKey = key.slice(3);
-				var newRow = $('<tr class="tableNote"><td class="alert-box success">' + items[key] + '</td><</tr>')
+				
+				var newRow = $('<tr class="tableNote"><td class="alert-box note">' + items[key] + '</td><</tr>')
+				
 				if(typeof(items[key]) !== "undefined"){
 					newRow.insertAfter($('tr a[href*=' + searchKey + ']' ))
 				};
@@ -1148,5 +1159,15 @@ $('div > div.media-body > h4 > a').each(function(){
 
 
 
+//plus button next to every alert-box that allows the user to add the contents of the alert-box to Notes
+$( ".alert-box" ).click(function() {
+  var addNote = $( this ).text();
+  var curNote = $('#sideNote').val();
+ 	if (curNote !== ""){
+  		$('#sideNote').val( $('#sideNote').val() + "\n" + "\n" + addNote);
+  	} else{
+  		$('#sideNote').val( $('#sideNote').val() + addNote);
+  	}
+});
 
 
