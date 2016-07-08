@@ -49,6 +49,7 @@ for(var i = 0; i < $('div.response').children('p').length; i++ ){
 //console.log(aryResponses);
 */
 
+
 //innocent until proven guilty
 $('div.response').addClass('good');
 
@@ -451,6 +452,10 @@ for(var i = 0; i < $('div.response').length; i++ ){
 var ant = 0; //Anticipated Attendance
 var totalReq = 0;
 var str = "";
+var cumCont = 0; //cumulative Contractual Services
+var cumAd = 0;
+var cumDue = 0;
+var cumMisc = 0;
 //filter
 for (var j = 0; j < aryResponses.length; j++){
 	//line item types
@@ -573,12 +578,14 @@ function sumReq(req,call){
 
 
 //3311 In-State Conference / 3321 Out-of-State Conference
+
 function Conference(LI, reqAmt, l){
 	var cap = 50 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
 	var msg = ('Conference Fees are capped at $50 per quantity of anticipated attendance (DG: 3311-10201401). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt);
 	appenderNotice("Food and lodging cannot be included in the conference fee (DG: 3311-00201320), and the conference fee cannot be a fundraiser for the parent organization, or for a political campaign/party (DG: 331100201321)",l+2);
 	reqAmt = (reqAmt.replace('$',''));
+	reqAmt = (reqAmt.replace(',',''));
 	if (cap !== 0){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
@@ -595,9 +602,15 @@ function Advertising(LI, reqAmt, l){
 	appenderNotice("General advertising for a group is not funded unless it is for a banner, table throw, or similar item to stay with the group (DG: 3724-11201406), off-campus advertising is not funded (DG: 3724-00201324), and newspaper advertisements are not funded (DG: 3724-09201304)",l-4);
 	var msg = ('Advertising is capped at $1 per quantity of anticipated attendance (DG: 3724-00201322). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
+	reqAmt = (reqAmt.replace(',',''));
+	reqAmt = +(reqAmt)
+
+	cumAd += reqAmt;
+	console.log(cumCont);
 	if (cap !== 0){
 		appender(msg, l);
-		capCheck(cap, reqAmt,l);	
+		capCheck(cap, reqAmt,l);
+		cumCapCheck(cumAd, cap, l, LI)	
 	}
 }
 
@@ -615,8 +628,8 @@ function Bus(LI, reqAmt, l){
 	var msg = ('All forms of transportation are capped at $57.64 per quantity of anticipated attendance (DG: 0001-11201403). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	appenderNotice("Must be rented from Motor transportation Services or Shuttle UM (DG: 0002-00201317). This is the only acceptable documentation.",l+2);
 	appenderNotice("Must submit a Google Map screenshot showing route and distance to me traveled (in miles) (DG: 3620-00201327).",l+2);
-
 	reqAmt = (reqAmt.replace('$',''));
+	reqAmt = (reqAmt.replace(',',''));
 	if (cap !== 0){
 		appender(msg, l);
 		capCheck(cap, reqAmt,l);	
@@ -626,15 +639,23 @@ function Bus(LI, reqAmt, l){
 
 
 //3752 Contractual Services
+
 function Contractual(LI, reqAmt, l){
 	var cap = 10 * parseInt(ant);
 	var capAmt =  toCurrency(cap);
 	appenderNotice("For contractual services, any price must be final and exact. In addition, a student member of an organization who is providing a service that is directly related to the mission of that organization may not receive monetary compensation from the SAF without pre-approval from the SGA Legislature (DG: 3752-02201402)",l+4);
 	var msg = ('Contractual services are capped at $10 per quantity of anticipated attendance per day of the program (DG: 3752-00201328). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ". Note:  The $10 cap per Anticipated Attendance for one-on-one training will be lifted only when demonstrated to benefit the entire group (DG 3752-10201302)")
+	
 	reqAmt = (reqAmt.replace('$',''));
+	reqAmt = (reqAmt.replace(',',''));
+	reqAmt = +(reqAmt)
+
+	cumCont += reqAmt;
+	console.log(cumCont);
 	if (cap !== 0){
 		appender(msg, l);
-		capCheck(cap, reqAmt,l);	
+		capCheck(cap, reqAmt,l);
+		cumCapCheck(cumCont, cap, l, LI)	
 	}
 	
 }
@@ -647,9 +668,15 @@ function Dues(LI, reqAmt, l){
 	appenderNotice("If the group is requesting dues, they must demonstrate that the expenses are for the group as a whole, not individual memberships (DG: 4930-00201329)",l+2);
 	var msg = ('Non-conference, event-based fees are capped at $10 per quantity of anticipated attendance (DG: 0002-00201316). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt)
 	reqAmt = (reqAmt.replace('$',''));
+	reqAmt = (reqAmt.replace(',',''));
+	reqAmt = +(reqAmt)
+
+	cumDue += reqAmt;
+	console.log(cumCont);
 	if (cap !== 0){
 		appender(msg, l);
-		capCheck(cap, reqAmt,l);	
+		capCheck(cap, reqAmt,l);
+		cumCapCheck(cumDue, cap, l, LI)	
 	}
 	
 }
@@ -682,10 +709,14 @@ function Misc(LI, reqAmt, l){
 	var capAmt =  toCurrency(cap);
 	var msg = ('Funding for <strong>decorations</strong> is capped at $1 per quantity of anticipated attendance (DG: 3952-00201332). The anticipated attendance is ' + ant + ', so the cap is ' + capAmt + ' if the group is seeking funding for decorations')
 	reqAmt = (reqAmt.replace('$',''));
+	reqAmt = (reqAmt.replace(',',''));
+	reqAmt = +(reqAmt)
 	appenderNotice("Check to make sure the group has an inventory record and/or secure, on-campus storage", l)
+	cumMisc += reqAmt;
 	if (cap !== 0){
 		appender(msg, l);
-		capCheck(cap, reqAmt,l,"misc");	
+		capCheck(cap, reqAmt,l,"misc");
+		cumCapCheck(cumMisc, cap, l, LI)
 	}
 	
 }
@@ -787,7 +818,10 @@ if (aryResponses[49] !==  "No answer submitted"
 		&& aryResponses[49] !== "no admission will be charged."
 		&& aryResponses[49] !== "n/a" 
 		&& aryResponses[49] !== "n/a." 
-		&& aryResponses[49] !== "na."
+		&& aryResponses[49] !== "N/a"
+		&& aryResponses[49] !== "N/A"
+		&& aryResponses[49] !== "N/a."
+		&& aryResponses[49] !== "N/A."
 		&& aryResponses[49] !== "na" ) {
 	appender("Programs utilizing any amount of SGA funding may only charge admission to cover the per-person cost of expenses directly incurred by the event which are not funded by the SGA. Programs with all other admissions charges are not funded. Programs may not otherwise receive any form of payment from undergraduate students. Mandatory registration, fees, donations, and other forms of payment are not permitted (DG: 0001-02201604)", 49)
 }
@@ -851,7 +885,11 @@ function capCheck(cap, reqAmt, loc, type){
 	}
 }
 
-
+function cumCapCheck(cumAmt,cap,l, LI){
+	if (cumAmt > cap){
+		appenderError("The <strong>cumulative requested amount</strong> for " +LI.slice(5)+ " seems to be over the cap.",l)
+	}
+}
 
 
 
@@ -1112,7 +1150,7 @@ These are the only elements on this page with that class
 
 
 //get all of the notes from chrome.storage and insert them into the table
-
+var nChecklistLog = 0;
 $('div > div.media-body > h4 > a').each(function(){
 	var str = $(this).attr('href')
 	var key = "key" + str.slice(str.lastIndexOf('/')+1, str.lastIndexOf('?'))
@@ -1134,7 +1172,7 @@ $('div > div.media-body > h4 > a').each(function(){
 				};
 			}
 	})
-	/*This will add the checklist to the page ***Working Feature Disabled***
+	//This will add the checklist to the page ***Working Feature Disabled***
 	chrome.storage.sync.get(cKey, function(items) {
 		if(!chrome.runtime.error) {
 			var nChecks = items[cKey];
@@ -1145,15 +1183,17 @@ $('div > div.media-body > h4 > a').each(function(){
 					cSum += 1;
 				}
 			}
+			nChecklistLog = cSum;
 			console.log('sum: ' + cSum)
 				var searchKey = key.slice(3);
 				var newRow = $('<tr><td class="smallFont">Checklist: ' + cSum + '/9</td><</tr>') //BUGPOT15428
 				if(typeof(items[cKey]) !== "undefined"){
-					newRow.insertAfter($('tr a[href*=' + searchKey + ']' ))
+					//newRow.insertAfter($('tr a[href*=' + searchKey + ']' ))
+					//mouseover thing here
 				};
 		}
 	})
-	*/
+	
 })
 
 
@@ -1171,3 +1211,22 @@ $( ".alert-box" ).click(function() {
 });
 
 
+
+
+
+$('.media-body').on({
+  "mouseover": function() {
+    $(this).tooltip({ items: ".media-body", content: "test", position: {
+                        my: "center",
+                        at: "right+50",
+                        track: false,
+                        using: function(position, feedback) {
+                            $(this).css(position);                   
+                        }
+                    }});
+    $(this).tooltip("open");
+  },
+  "mouseout": function() {      
+     $(this).tooltip("disable");   
+  }
+});
