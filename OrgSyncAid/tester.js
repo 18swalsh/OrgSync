@@ -177,7 +177,7 @@ $('#togButton').on({
     $(this).tooltip("open");
   },
   "mouseout": function() {      
-     $(this).tooltip("disable");   
+     $(this).tooltip("disable");  
   }
 });
 
@@ -1133,12 +1133,6 @@ $( document ).ready(function(){
 	
 });
 
-
-
-
-
-
-
 //Insert notes into the form submission list page
 
 /*Notes:
@@ -1190,6 +1184,7 @@ $('div > div.media-body > h4 > a').each(function(){
 				if(typeof(items[cKey]) !== "undefined"){
 					//newRow.insertAfter($('tr a[href*=' + searchKey + ']' ))
 					//mouseover thing here
+				
 				};
 		}
 	})
@@ -1198,8 +1193,8 @@ $('div > div.media-body > h4 > a').each(function(){
 
 
 
-
-//plus button next to every alert-box that allows the user to add the contents of the alert-box to Notes
+var newSumLog = 0;
+//allows the user to add the contents of the alert-box to Notes on click
 $( ".alert-box" ).click(function() {
   var addNote = $( this ).text();
   var curNote = $('#sideNote').val();
@@ -1211,12 +1206,23 @@ $( ".alert-box" ).click(function() {
 });
 
 
-
-
-
-$('.media-body').on({
+$('div.media-body').on({
   "mouseover": function() {
-    $(this).tooltip({ items: ".media-body", content: "test", position: {
+
+    $(this).tooltip({ items: $(this), content: function(){
+    	if ($(this).is(':has(".alert-box")')){
+    		var checka = getChecklist($(this).find('a'))
+    		if (checka === 9){
+    			var checklistComplete = true;
+    		}
+    		if (!checklistComplete){
+    			return "Checklist: " + checka + "/9"
+    		}else{
+    			return "Checklist complete!";
+    		}
+    	}	
+    }		
+    				, position: {
                         my: "center",
                         at: "right+50",
                         track: false,
@@ -1224,9 +1230,39 @@ $('.media-body').on({
                             $(this).css(position);                   
                         }
                     }});
-    $(this).tooltip("open");
+  
+    	$(this).tooltip("open");
+	
   },
   "mouseout": function() {      
-     $(this).tooltip("disable");   
+     $(this).tooltip("disable");
+
   }
 });
+
+function getChecklist(row){
+
+	var str = row.attr('href')
+	var key = "key" + str.slice(str.lastIndexOf('/')+1, str.lastIndexOf('?'))
+	var cKey = key + "a";
+	key = key.toString();
+	cKey = cKey.toString();
+	//return cKey;
+		chrome.storage.sync.get(cKey, function(items) {
+		if(!chrome.runtime.error) {
+			var nChecks = items[cKey];
+			var cSum = 0;
+			for (var i = 0; i < 9; i++){  //BUGPOT15428
+				if (nChecks[i] === "1"){
+					cSum += 1;
+				}
+			}
+			console.log(cSum)
+			sumLog = cSum;
+			//return cSum;
+		}
+	});		
+			newSumLog = sumLog
+			return newSumLog;
+}
+
