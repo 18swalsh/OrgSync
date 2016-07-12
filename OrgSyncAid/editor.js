@@ -1,4 +1,4 @@
-/*This sheet is jsut used to mess around with DOM manipulation
+/*This sheet is just used to mess around with DOM manipulation
 $('#review-question-2383102-response > div.row.form_element.question.response.not-submitted.good.neutral.NaQ > div.top.qTitle > div.small > p > a').each(function() {
         var temp = this.href
         newHref = temp.replace('http','https')
